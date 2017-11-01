@@ -1,4 +1,4 @@
-package edu.upm.midas.data.relational.repository;
+package edu.upm.midas.data.relational.service;
 
 import edu.upm.midas.data.relational.entities.addb.AlbumDisease;
 import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
@@ -14,7 +14,7 @@ import java.util.List;
  * @className ResourceRepository
  * @see
  */
-public interface AlbumDiseaseRepository {
+public interface AlbumDiseaseService {
 
     AlbumDisease findById(AlbumDiseasePK albumDiseasePK);
     
@@ -22,16 +22,12 @@ public interface AlbumDiseaseRepository {
     
     List<AlbumDisease> findAllQuery();
 
-    void persist(AlbumDisease albumDisease);
+    void save(AlbumDisease albumDisease);
 
     int insertNative(String albumId, String version, String diseaseId);
-
-    boolean deleteById(AlbumDiseasePK albumDiseasePK);
 
     void delete(AlbumDisease albumDisease);
 
     AlbumDisease update(AlbumDisease albumDisease);
 
-    Integer updateByIdQuery(AlbumDisease albumDisease);
-    
 }

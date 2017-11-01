@@ -51,11 +51,6 @@ import java.util.Objects;
                 name = "Code.insertNative",
                 query = "INSERT INTO code (code_id, resource_id) "
                         + "VALUES (:codeId, :resourceId)"
-        ),
-        @NamedNativeQuery(
-                name = "DiseaseCode.insertNative",
-                query = "INSERT IGNORE INTO disease_code (disease_id, code_id, resource_id) "
-                        + "VALUES (:diseaseId, :codeId, :resourceId)"
         )
 })
 

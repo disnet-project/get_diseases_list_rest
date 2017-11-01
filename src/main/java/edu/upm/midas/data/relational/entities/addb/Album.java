@@ -31,24 +31,64 @@ import java.util.Objects;
 @NamedNativeQueries({
         @NamedNativeQuery(
                 name = "Album.findByIdNative",
-                query = "SELECT a.album_id, a.date "
-                        + "FROM album a WHERE a.album_id = : albumId AND a.date= :version"
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.album_id = :albumId AND a.date = :version "
 
         ),
         @NamedNativeQuery(
                 name = "Album.findByVersionNative",
-                query = "SELECT a.album_id, a.date "
-                        + "FROM album a WHERE a.date= :version"
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.date = :version"
+
+        ),
+        @NamedNativeQuery(
+                name = "Album.findLastVersionNative",
+                query = "SELECT MAX(a.date) "
+                        + "FROM album a "
+
+        ),
+        @NamedNativeQuery(
+                name = "Album.findByLastVersionNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases " +
+                        "FROM album a WHERE a.date = ( " +
+                        "SELECT MAX(b.date) " +
+                        "FROM album b ) "
+
+        ),
+        @NamedNativeQuery(
+                name = "Album.findByVersionGraterThanNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.date > :version"
+
+        ),
+        @NamedNativeQuery(
+                name = "Album.findByVersionSmallerThanNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.date < :version"
 
         ),
         @NamedNativeQuery(
                 name = "Album.findByNumberDiseasesNative",
-                query = "SELECT a.album_id, a.date "
-                        + "FROM album a WHERE a.number_diseases= :numberDiseases"
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.number_diseases = :numberDiseases"
+
+        )
+        ,
+        @NamedNativeQuery(
+                name = "Album.findByNumberDiseasesGreaterThanNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.number_diseases > :numberDiseases"
+
+        )
+        ,
+        @NamedNativeQuery(
+                name = "Album.findByNumberDiseasesSmallerThanNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases "
+                        + "FROM album a WHERE a.number_diseases < :numberDiseases"
 
         ),
         @NamedNativeQuery(
-                name = "Album.MaxSizeNative",
+                name = "Album.maxSizeNative",
                 query = "SELECT MAX(a.number_diseases) "
                         + "FROM album a "
 
@@ -60,20 +100,51 @@ import java.util.Objects;
                 query = "SELECT a.album_id, a.date, a.number_diseases "
                         + "FROM album a WHERE a.number_diseases = ("
                         + "SELECT MAX(b.number_diseases) "
-                        + "FROM album b ) as c "
+                        + "FROM album b ) "
 
         ),
 
 
+
+        @NamedNativeQuery(
+                name = "Album.findLinksOnWikipediaById",
+                query = "SELECT a.album_id, a.date, d.disease_id, d.name, s.source_id, s.name, u.url " +
+                        "FROM album a " +
+                        "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
+                        "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
+                        "INNER JOIN disease_url du ON du.disease_id = d.disease_id " +
+                        "INNER JOIN source s ON s.source_id = du.source_id " +
+                        "INNER JOIN url u ON u.url_id = du.url_id " +
+                        "WHERE a.album_id = :albumId " +
+                        "AND a.date = :version " +
+                        "AND s.name = 'wikipedia' "
+
+        ),@NamedNativeQuery(
+        name = "Album.findLinksByIdAndSourceNameNative",
+        query = "SELECT a.album_id, a.date, d.disease_id, d.name, s.source_id, s.name, u.url " +
+                "FROM album a " +
+                "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
+                "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
+                "INNER JOIN disease_url du ON du.disease_id = d.disease_id " +
+                "INNER JOIN source s ON s.source_id = du.source_id " +
+                "INNER JOIN url u ON u.url_id = du.url_id " +
+                "WHERE a.album_id = :albumId " +
+                "AND a.date = :version " +
+                "AND s.name = :sourceName "
+
+        ),
+
+
+
         @NamedNativeQuery(
                 name = "Album.findAllNative",
-                query = "SELECT a.album_id, a.date "
+                query = "SELECT a.album_id, a.date, a.number_diseases "
                         + "FROM album a "
         )
 
         ,
         @NamedNativeQuery(
-                name = "Album.insertAlbumAndDateNative",
+                name = "Album.insertByAlbumIdAndVersionNative",
                 query = "INSERT INTO album (album_id, date) " +
                         "VALUES (:albumId, :version)"
         ),
@@ -81,6 +152,12 @@ import java.util.Objects;
                 name = "Album.insertNative",
                 query = "INSERT INTO album (album_id, date, number_diseases) " +
                         "VALUES (:albumId, :version, :numberDiseases)"
+        ),
+        @NamedNativeQuery(
+                name = "Album.updateNumberDiseasesByIdNative",
+                query = "UPDATE album a " +
+                        "SET a.number_diseases = :numberDiseases " +
+                        "WHERE album_id = :albumId AND date = :version "
         )
 })
 

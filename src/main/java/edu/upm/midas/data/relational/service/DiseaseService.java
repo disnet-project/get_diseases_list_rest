@@ -1,4 +1,4 @@
-package edu.upm.midas.data.relational.repository;
+package edu.upm.midas.data.relational.service;
 
 import edu.upm.midas.data.relational.entities.addb.Disease;
 
@@ -13,23 +13,21 @@ import java.util.List;
  * @className ResourceRepository
  * @see
  */
-public interface DiseaseRepository {
+public interface DiseaseService {
 
     Disease findById(String diseaseId);
 
     Disease findByIdNative(String diseaseId);
 
-    Object[] findByNameNative(String name);
+    Disease findByNameNative(String name);
 
     String findLastIdNative();
-    
+
     List<Disease> findAllQuery();
 
-    void persist(Disease disease);
+    void save(Disease disease);
 
     int insertNative(String diseaseId, String name);
-
-    boolean deleteById(String diseaseId);
 
     void delete(Disease disease);
 
@@ -37,6 +35,4 @@ public interface DiseaseRepository {
 
     int updateNative(String diseaseId, String name);
 
-    Integer updateByIdQuery(Disease disease);
-    
 }

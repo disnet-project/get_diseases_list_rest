@@ -1,4 +1,4 @@
-package edu.upm.midas.data.relational.repository;
+package edu.upm.midas.data.relational.service;
 
 
 import edu.upm.midas.data.relational.entities.addb.Source;
@@ -14,7 +14,7 @@ import java.util.List;
  * @className SourceService
  * @see
  */
-public interface SourceRepository {
+public interface SourceService {
 
     Source findById(String sourceId);
 
@@ -26,16 +26,12 @@ public interface SourceRepository {
 
     List<Source> findAllNative();
 
-    void persist(Source source);
+    void save(Source source);
 
     int insertNative(String sourceId, String name);
-
-    boolean deleteById(String sourceId);
 
     void delete(Source source);
 
     Source update(Source source);
-
-    int updateByIdQuery(Source source);
 
 }

@@ -44,6 +44,11 @@ import java.util.Objects;
                 resultClass = Source.class
         ),
         @NamedNativeQuery(
+                name = "Source.findLastIdNative",
+                query = "SELECT s.source_id "
+                        + "FROM source s ORDER BY CAST( SUBSTRING( s.source_id , 3) AS UNSIGNED) DESC"
+        ),
+        @NamedNativeQuery(
                 name = "Source.findAllNative",
                 query = "SELECT s.source_id, s.name "
                         + "FROM source s "

@@ -27,6 +27,11 @@ public class TimeProvider {
         return new Date(new java.util.Date().getTime());
     }
 
+    public String getNowFormatyyyyMMdd(){
+        //return new Date(117, 05, 29);
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date(new java.util.Date().getTime()));
+    }
+
     public long getTimestampNumber(){
         return new Timestamp( System.currentTimeMillis() ).getTime();
     }

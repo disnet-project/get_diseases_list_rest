@@ -40,6 +40,11 @@ import java.util.Objects;
                 resultClass = Resource.class
         ),
         @NamedNativeQuery(
+                name = "Resource.findAllNative",
+                query = "SELECT r.resource_id, r.name "
+                        + "FROM resource r "
+        ),
+        @NamedNativeQuery(
                 name = "Resource.findIdByNameNative",
                 query = "SELECT r.resource_id "
                         + "FROM resource r WHERE r.name COLLATE utf8_bin = :name"

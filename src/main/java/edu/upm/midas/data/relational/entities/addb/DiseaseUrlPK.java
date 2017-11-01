@@ -28,7 +28,7 @@ public class DiseaseUrlPK implements Serializable {
         this.diseaseId = diseaseId;
     }
 
-    @Column(name = "url_id", nullable = false, length = 15)
+    @Column(name = "url_id", nullable = false, length = 20)
     @Id
     public String getUrlId() {
         return urlId;

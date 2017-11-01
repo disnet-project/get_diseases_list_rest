@@ -1,0 +1,46 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX category: <http://dbpedia.org/resource/Category:>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT DISTINCT ?subject ?symp ?sn ?icd9 ?icd10 ?disDB ?meshID ?mlp ?omim ?emed
+WHERE {
+	?symp foaf:isPrimaryTopicOf <http://en.wikipedia.org/wiki/Ataxia>.
+        ?symp dcterms:subject ?subject.
+	OPTIONAL { ?symp <http://dbpedia.org/ontology/icd9> ?icd9. }
+	OPTIONAL { ?symp <htp://dbpedia.org/ontology/icd10> ?icd10. }
+	OPTIONAL { ?symp <http://dbpedia.org/ontology/diseasesDb> ?disDB. }
+	OPTIONAL { ?symp <http://dbpedia.org/ontology/meshId> ?meshID. }
+	OPTIONAL { ?symp <http://dbpedia.org/property/medlineplus> ?mlp. }
+	OPTIONAL { ?symp <http://dbpedia.org/ontology/omim> ?omim. }
+	OPTIONAL { ?symp <http://dbpedia.org/property/emedicinetopic> ?emed. }
+        OPTIONAL {
+                ?symp rdfs:label ?sn.
+                FILTER (lang(?sn) = 'en')
+        }
+        FILTER (?subject IN (
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_General>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Nervous_system>, 								<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Cognition,_perception,_emotional_state_and_behaviour>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Digestive_system_and_abdomen>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Speech_and_voice>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Nervous_and_musculoskeletal_systems>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Skin_and_subcutaneous_tissue>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Endocrinology,_nutrition,_and_metabolism>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Urinary_system>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Circulatory_and_respiratory_systems>,
+		<http://dbpedia.org/resource/Category:Medical_signs>,
+		<http://dbpedia.org/resource/Category:Symptoms>,
+		<http://dbpedia.org/resource/Category:Audible_medical_signs>,
+		<http://dbpedia.org/resource/Category:Radiologic_signs>,
+		<http://dbpedia.org/resource/Category:Musculoskeletal_radiographic_signs>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_musculoskeletal_system>,
+		<http://dbpedia.org/resource/Category:Digestive_disease_symptoms>,
+		<http://dbpedia.org/resource/Category:Dermatologic_signs>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Circulatory_system>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Respiratory_system>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Vascular>,
+		<http://dbpedia.org/resource/Category:Symptoms_and_signs:_Cardiac>
+) )
+}

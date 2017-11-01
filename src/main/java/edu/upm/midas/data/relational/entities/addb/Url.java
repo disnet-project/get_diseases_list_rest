@@ -73,7 +73,7 @@ public class Url {
     private List<DiseaseUrl> diseaseUrlsByUrlId;
 
     @Id
-    @Column(name = "url_id", nullable = false, length = 15)
+    @Column(name = "url_id", nullable = false, length = 20)
     public String getUrlId() {
         return urlId;
     }

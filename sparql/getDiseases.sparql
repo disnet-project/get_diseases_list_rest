@@ -1,0 +1,26 @@
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX category: <http://dbpedia.org/resource/Category:>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+SELECT DISTINCT ?d ?dn ?wikiPage ?icd9 ?icd10 ?disDB ?meshID ?mlp ?omim ?emed ?frbase 
+WHERE {
+	?d a <http://dbpedia.org/ontology/Disease>.
+	?d foaf:isPrimaryTopicOf ?wikiPage.
+	OPTIONAL { ?d <http://dbpedia.org/ontology/icd9> ?icd9. }
+	OPTIONAL { ?d <http://dbpedia.org/ontology/icd10> ?icd10. }
+	OPTIONAL { ?d <http://dbpedia.org/ontology/diseasesDb> ?disDB. }
+	OPTIONAL { ?d <http://dbpedia.org/ontology/meshId> ?meshID. }
+	OPTIONAL { ?d <http://dbpedia.org/property/medlineplus> ?mlp. }
+	OPTIONAL { ?d <http://dbpedia.org/ontology/omim> ?omim. }
+	OPTIONAL { ?d <http://dbpedia.org/property/emedicinetopic> ?emed. }
+	OPTIONAL {
+  		?d owl:sameAs ?frbase.
+  		FILTER(regex(str(?frbase), "freebase", "i")).
+	}
+        OPTIONAL {
+                ?d rdfs:label ?dn.
+                FILTER (lang(?dn) = 'en')
+        }
+}

@@ -29,4 +29,12 @@ public class Constants {
     @Value("${my.header.param.token.name}")
     public String HEADER_PARAM_TOKEN_NAME;
 
+    /** Ruta del archivo XML source */
+    public static final String DISEASES_SPARQL_QUERY_FILE = "sparql/getDiseases.sparql";
+    public static final String DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql";
+    public static final String EXTRACTION_HISTORY_FOLDER = "extraction_history/";
+
+    public static final String SEMANTIC_TYPES[] = { "IDC-9", "IDC-10", "DiseasesDB", "MeSH", "lbpr", "lbtr" };
+
+
 }

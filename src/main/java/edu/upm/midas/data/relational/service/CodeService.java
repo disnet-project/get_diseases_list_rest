@@ -1,9 +1,8 @@
-package edu.upm.midas.data.relational.repository;
+package edu.upm.midas.data.relational.service;
 
 import edu.upm.midas.data.relational.entities.addb.Code;
 import edu.upm.midas.data.relational.entities.addb.CodePK;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,24 +14,20 @@ import java.util.List;
  * @className ResourceRepository
  * @see
  */
-public interface CodeRepository {
+public interface CodeService {
 
     Code findById(CodePK codePK);
-
-    Object[] findByIdNative(CodePK codePK);
+    
+    Code findByIdNative(CodePK codePK);
     
     List<Code> findAllQuery();
 
-    void persist(Code code);
+    void save(Code code);
 
     int insertNative(String codeId, Integer resourceId);
-
-    boolean deleteById(CodePK codePK);
 
     void delete(Code code);
 
     Code update(Code code);
 
-    Integer updateByIdQuery(Code code);
-    
 }
