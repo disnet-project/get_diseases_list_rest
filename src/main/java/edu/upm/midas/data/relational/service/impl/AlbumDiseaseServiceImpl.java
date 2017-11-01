@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -34,7 +35,17 @@ public class AlbumDiseaseServiceImpl implements AlbumDiseaseService {
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
     public AlbumDisease findByIdNative(AlbumDiseasePK albumDiseasePK) {
-        return daoAlbumDisease.findByIdNative(albumDiseasePK);
+        AlbumDisease albumDisease = null;
+        Object[] oQuery = daoAlbumDisease.findByIdNative(albumDiseasePK);
+        if (oQuery != null){
+            albumDisease = new AlbumDisease();
+            albumDisease.setAlbumId( (String) oQuery[0] );
+            albumDisease.setDate( (java.sql.Date) oQuery[1] );
+            albumDisease.setDiseaseId( (String) oQuery[2] );
+        }
+        //if(source!=null)
+        //Hibernate.initialize(source.getDiseasesBySidsource());
+        return albumDisease;
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
@@ -51,7 +62,7 @@ public class AlbumDiseaseServiceImpl implements AlbumDiseaseService {
 
     @Transactional(propagation= Propagation.REQUIRED)
     @Override
-    public int insertNative(String albumId, String version, String diseaseId) {
+    public int insertNative(String albumId, Date version, String diseaseId) {
         return daoAlbumDisease.insertNative(albumId, version, diseaseId);
     }
 

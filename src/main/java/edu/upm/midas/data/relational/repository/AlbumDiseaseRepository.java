@@ -3,6 +3,7 @@ package edu.upm.midas.data.relational.repository;
 import edu.upm.midas.data.relational.entities.addb.AlbumDisease;
 import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,14 +18,14 @@ import java.util.List;
 public interface AlbumDiseaseRepository {
 
     AlbumDisease findById(AlbumDiseasePK albumDiseasePK);
-    
-    AlbumDisease findByIdNative(AlbumDiseasePK albumDiseasePK);
+
+    Object[] findByIdNative(AlbumDiseasePK albumDiseasePK);
     
     List<AlbumDisease> findAllQuery();
 
     void persist(AlbumDisease albumDisease);
 
-    int insertNative(String albumId, String version, String diseaseId);
+    int insertNative(String albumId, Date version, String diseaseId);
 
     boolean deleteById(AlbumDiseasePK albumDiseasePK);
 

@@ -6,6 +6,7 @@ import edu.upm.midas.data.relational.repository.AlbumDiseaseRepository;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,9 +31,9 @@ public class AlbumDiseaseRepositoryImpl extends AbstractDao<AlbumDiseasePK, Albu
 
     @SuppressWarnings("unchecked")
     @Override
-    public AlbumDisease findByIdNative(AlbumDiseasePK albumDiseasePK) {
-        AlbumDisease diseaseCode = null;
-        List<AlbumDisease> diseaseCodeList = (List<AlbumDisease>) getEntityManager()
+    public Object[] findByIdNative(AlbumDiseasePK albumDiseasePK) {
+        Object[] diseaseCode = null;
+        List<Object[]> diseaseCodeList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("AlbumDisease.findByIdNative")
                 .setParameter("albumId", albumDiseasePK.getAlbumId())
                 .setParameter("version", albumDiseasePK.getDate())
@@ -58,7 +59,7 @@ public class AlbumDiseaseRepositoryImpl extends AbstractDao<AlbumDiseasePK, Albu
     }
 
     @Override
-    public int insertNative(String albumId, String version, String diseaseId) {
+    public int insertNative(String albumId, Date version, String diseaseId) {
         return getEntityManager()
                 .createNamedQuery("AlbumDisease.insertNative")
                 .setParameter("albumId", albumId)

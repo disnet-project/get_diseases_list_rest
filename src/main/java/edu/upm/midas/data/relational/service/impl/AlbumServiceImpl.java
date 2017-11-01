@@ -38,7 +38,17 @@ public class AlbumServiceImpl implements AlbumService {
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
     public Album findByIdNative(AlbumPK albumPK) {
-        return daoAlbum.findByIdNative(albumPK);
+        Album album = null;
+        Object[] oQuery = daoAlbum.findByIdNative(albumPK);
+        if (oQuery != null){
+            album = new Album();
+            album.setAlbumId( (String) oQuery[0] );
+            album.setDate( (java.sql.Date) oQuery[1] );
+            album.setNumberDiseases( (Integer) oQuery[2] );
+        }
+        //if(source!=null)
+        //Hibernate.initialize(source.getDiseasesBySidsource());
+        return album;
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)

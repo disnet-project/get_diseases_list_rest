@@ -3,6 +3,7 @@ import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.common.util.UniqueId;
 import edu.upm.midas.data.relational.entities.addb.Album;
+import edu.upm.midas.data.relational.entities.addb.AlbumDisease;
 import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
 import edu.upm.midas.data.relational.entities.addb.AlbumPK;
 import edu.upm.midas.data.relational.service.AlbumDiseaseService;
@@ -49,6 +50,7 @@ public class AlbumHelper {
         album = albumService.findByIdNative(albumPK);
         if (album == null){
             int insert = albumService.insertNative(albumId, version, numberDiseases);
+            album = new Album();
             album.setAlbumId(albumPK.getAlbumId());
             album.setDate(albumPK.getDate());
             album.setNumberDiseases(numberDiseases);
@@ -58,11 +60,16 @@ public class AlbumHelper {
     }
 
 
-    public void insertDiseases(String albumId, edu.upm.midas.model.extract.Disease disease){
+    public void insertDiseases(Album album, String diseaseId){
         AlbumDiseasePK albumDiseasePK = new AlbumDiseasePK();
-        albumDiseasePK.set
-        albumDiseaseService.findByIdNative();
-        albumDiseaseService.insertNative();
+        albumDiseasePK.setAlbumId(album.getAlbumId());
+        albumDiseasePK.setDate(album.getDate());
+        albumDiseasePK.setDiseaseId(diseaseId);
+
+        AlbumDisease oAlbumDisease = albumDiseaseService.findByIdNative(albumDiseasePK);
+        if (oAlbumDisease == null){
+            albumDiseaseService.insertNative(albumDiseasePK.getAlbumId(), albumDiseasePK.getDate(), albumDiseasePK.getDiseaseId());
+        }
     }
 
 }

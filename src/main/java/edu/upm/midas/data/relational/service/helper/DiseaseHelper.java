@@ -55,6 +55,7 @@ public class DiseaseHelper {
             System.out.println("    Found");
             insertUrls(dis, disease.getDiseaseId());
             insertCodes(dis, disease.getDiseaseId());
+            return disease.getDiseaseId();
         }else {
             System.out.println("    Not Found");
             System.out.println("LasId: "+getDiseaseId());
@@ -64,25 +65,24 @@ public class DiseaseHelper {
             //Se insertan urls de la enfermedad
             insertUrls(dis, lastDiseaseId);
             insertCodes(dis, lastDiseaseId);
+            return lastDiseaseId;
         }
-
-        return "";
     }
 
 
     public void insertUrls(edu.upm.midas.model.extract.Disease disease, String diseaseId){
-        String url = deleteHttp(disease.getWikipediaPage());
+        String url = disease.getWikipediaPage();
         //Comprobar si existe la url de wikipedia
         if (!commonService.isEmpty(url)){//sourceId: 1 = wikipedia
             insertDiseaseUrl(1, "wikipedia", diseaseId, url, disease);
         }
         //Se inserta url de dbpedia
-        url = deleteHttp(disease.getURI());
+        url = disease.getURI();
         if (!commonService.isEmpty(url)){//2 = dbpedia
             insertDiseaseUrl(2, "dbpedia", diseaseId, url, disease);
         }
         //Se inserta url de freebase
-        url = deleteHttp(disease.getFreebaseURL());
+        url = disease.getFreebaseURL();
         if (!commonService.isEmpty(url)){//3 = freebase
             insertDiseaseUrl(3, "freebase", diseaseId, url, disease);
         }

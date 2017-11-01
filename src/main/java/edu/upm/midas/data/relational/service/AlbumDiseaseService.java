@@ -3,6 +3,7 @@ package edu.upm.midas.data.relational.service;
 import edu.upm.midas.data.relational.entities.addb.AlbumDisease;
 import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public interface AlbumDiseaseService {
 
     void save(AlbumDisease albumDisease);
 
-    int insertNative(String albumId, String version, String diseaseId);
+    int insertNative(String albumId, Date version, String diseaseId);
 
     void delete(AlbumDisease albumDisease);
 

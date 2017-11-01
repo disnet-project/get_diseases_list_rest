@@ -57,7 +57,8 @@ public class Populate {
                 Disease disease = ent.getValue();
                 diseaseList.add(disease);
                 System.out.println(v + ". Insert disease: " + disease.getName());
-                diseaseHelper.insertIfExist(disease);
+                String diseaseId = diseaseHelper.insertIfExist(disease);
+                albumHelper.insertDiseases(album, diseaseId);
                 v++;
             }
             //System.out.println(gson.toJson(diseaseList));

@@ -18,8 +18,8 @@ import java.util.List;
 public interface AlbumRepository {
 
     Album findById(AlbumPK albumPK);
-    
-    Album findByIdNative(AlbumPK albumPK);
+
+    Object[] findByIdNative(AlbumPK albumPK);
 
     Album findByVersionNative(Date version);
 

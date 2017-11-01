@@ -31,9 +31,9 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
-    public Album findByIdNative(AlbumPK albumPK) {
-        Album album = null;
-        List<Album> albumList = (List<Album>) getEntityManager()
+    public Object[] findByIdNative(AlbumPK albumPK) {
+        Object[] album = null;
+        List<Object[]> albumList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("Album.findByIdNative")
                 .setParameter("albumId", albumPK.getAlbumId())
                 .setParameter("version", albumPK.getDate())
