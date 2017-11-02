@@ -24,4 +24,3 @@ WHERE {
                 FILTER (lang(?dn) = 'en')
         }
 }
-LIMIT 10

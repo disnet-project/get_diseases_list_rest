@@ -3,11 +3,13 @@ import edu.upm.midas.data.relational.entities.addb.Album;
 import edu.upm.midas.data.relational.entities.addb.AlbumPK;
 import edu.upm.midas.data.relational.repository.AlbumRepository;
 import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.model.response.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -103,8 +105,22 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public List<Object[]> findLinksByIdAndSourceNameNative(String albumId, Date version, String source) {
-        return daoAlbum.findLinksByIdAndSourceNameNative(albumId, version, source);
+    public List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source) {
+        List<Disease> diseaseList = new ArrayList<>();
+        List<Object[]> oQueryList = daoAlbum.findLinksByIdAndSourceNameNative(albumId, version, source);
+        for (Object[] dis: oQueryList) {
+            Disease disease = new Disease();
+            disease.setAlbumId( (String) dis[0] );
+            disease.setVersion( (Date) dis[1] );
+            disease.setDiseaseId( (String) dis[2] );
+            disease.setName( (String) dis[3] );
+            disease.setSourceId( (String) dis[4] );
+            disease.setSourceName( (String) dis[5] );
+            disease.setUrl( (String) dis[6] );
+            System.out.println(disease.getName() + " - " + disease.getUrl());
+            diseaseList.add(disease);
+        }
+        return diseaseList;
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)

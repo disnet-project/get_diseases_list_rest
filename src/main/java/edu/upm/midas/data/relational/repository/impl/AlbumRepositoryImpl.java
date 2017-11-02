@@ -163,7 +163,7 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
         List<Object[]> diseases = null;
         List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("Album.findLinksByIdAndSourceNameNative")
-                .setParameter("version", albumId)
+                .setParameter("albumId", albumId)
                 .setParameter("version", version)
                 .setParameter("sourceName", sourceName)
                 //.setMaxResults(100)

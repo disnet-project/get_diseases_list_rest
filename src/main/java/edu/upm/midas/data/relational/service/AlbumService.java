@@ -2,6 +2,7 @@ package edu.upm.midas.data.relational.service;
 
 import edu.upm.midas.data.relational.entities.addb.Album;
 import edu.upm.midas.data.relational.entities.addb.AlbumPK;
+import edu.upm.midas.model.response.Disease;
 
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public interface AlbumService {
     //Importante!
     List<Object[]> findLinksOnWikipediaById(String albumId, Date version);
     //Importante!
-    List<Object[]> findLinksByIdAndSourceNameNative(String albumId, Date version, String source);
+    List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source);
 
     int maxSizeNative();
 
