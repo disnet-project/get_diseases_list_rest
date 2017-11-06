@@ -21,7 +21,7 @@ public interface AlbumDiseaseService {
     
     AlbumDisease findByIdNative(AlbumDiseasePK albumDiseasePK);
     
-    List<AlbumDisease> findAllQuery();
+    List<AlbumDisease> findAllNative();
 
     void save(AlbumDisease albumDisease);
 

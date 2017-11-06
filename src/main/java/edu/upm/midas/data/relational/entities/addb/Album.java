@@ -108,7 +108,7 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "Album.findLinksOnWikipediaById",
-                query = "SELECT a.album_id, a.date, d.disease_id, d.name, s.source_id, s.name, u.url " +
+                query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url " +
                         "FROM album a " +
                         "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
                         "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
@@ -121,7 +121,7 @@ import java.util.Objects;
 
         ),@NamedNativeQuery(
         name = "Album.findLinksByIdAndSourceNameNative",
-        query = "SELECT a.album_id, a.date, d.disease_id, d.name, s.source_id, s.name, u.url " +
+        query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url " +
                 "FROM album a " +
                 "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
                 "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
@@ -155,8 +155,11 @@ import java.util.Objects;
         ),
         @NamedNativeQuery(
                 name = "Album.updateNumberDiseasesByIdNative",
-                query = "UPDATE album a " +
-                        "SET a.number_diseases = :numberDiseases " +
+                query = "UPDATE album " +
+                        "SET number_diseases = (" +
+                        "SELECT COUNT(*) " +
+                        "FROM album_disease b " +
+                        "WHERE b.album_id = :albumId AND b.date = :version) " +
                         "WHERE album_id = :albumId AND date = :version "
         )
 })

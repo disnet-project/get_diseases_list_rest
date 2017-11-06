@@ -10,7 +10,9 @@ import edu.upm.midas.data.relational.service.helper.DiseaseHelper;
 import edu.upm.midas.model.extract.Code;
 import edu.upm.midas.model.extract.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.*;
@@ -36,45 +38,63 @@ public class Populate {
     private AlbumHelper albumHelper;
     @Autowired
     private TimeProvider timeProviderService;
+    @Value("${my.service.extraction_history.dot_termination}")
+    private String TERMINATION;
     @Autowired
     private Common commonService;
 
+
+    /**
+     * @throws Exception
+     */
+    @Transactional
     public void populate() throws Exception{
 
         Map<Code, Disease> diseases = getDiseaseAlbumService.getDiseasesListFromDBPedia();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         List<Disease> diseaseList = new ArrayList<>();
 
-        System.out.println("-------------------- POPULATE DATABASE --------------------");
-        System.out.println("Populate start...");
-        Set<Map.Entry<Code, Disease>> allDS = diseases.entrySet();
-        Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
-        Album album = albumHelper.insertIfExist(allDS.size());
-        if (!commonService.isEmpty(album.getAlbumId())){
-            int v = 0;
-            while (it.hasNext()) {
-                Map.Entry<Code, Disease> ent = it.next();
-                Disease disease = ent.getValue();
-                diseaseList.add(disease);
-                System.out.println(v + ". Insert disease: " + disease.getName());
-                String diseaseId = diseaseHelper.insertIfExist(disease);
-                albumHelper.insertDiseases(album, diseaseId);
-                v++;
+        if (diseases != null) {
+            System.out.println("-------------------- POPULATE DATABASE --------------------");
+            System.out.println("Populate start...");
+            Set<Map.Entry<Code, Disease>> allDS = diseases.entrySet();
+            Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
+            Album album = albumHelper.insertIfExist(allDS.size());
+            if (album != null) {
+                int v = 0;
+                while (it.hasNext()) {
+                    Map.Entry<Code, Disease> ent = it.next();
+                    Disease disease = ent.getValue();
+                    diseaseList.add(disease);
+                    System.out.println(v + ". Insert disease: " + disease.getName());
+                    String diseaseId = diseaseHelper.insertIfExist(disease);
+                    albumHelper.insertDiseases(album, diseaseId);
+                    v++;
+                }
+                albumHelper.update(album);
+                //System.out.println(gson.toJson(diseaseList));
+                writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd());
+                System.out.println("Total: " + v);
+                System.out.println("End polulation.");
+            } else {
+                System.out.println("ERR.album empty!");
             }
-            //System.out.println(gson.toJson(diseaseList));
-            writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd());
-            System.out.println("Total: " + v);
-            System.out.println("End polulation.");
-        }else{
-            System.out.println("ERR.albumId empty!");
         }
 
 
     }
 
 
+    /**
+     * Método que escri
+     *
+     * @param diseaseJsonBody
+     * @param albumId
+     * @param version
+     * @throws IOException
+     */
     public void writeJSONFile(String diseaseJsonBody, String albumId, String version) throws IOException {
-        String fileName = version + "_" +albumId + ".adis";
+        String fileName = version + "_" +albumId + TERMINATION;//adis = disease album
         String path = Constants.EXTRACTION_HISTORY_FOLDER + fileName;
         File file = new File(path);
         BufferedWriter bW;

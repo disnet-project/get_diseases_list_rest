@@ -66,7 +66,15 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public Album findByLastVersionNative() {
-        return daoAlbum.findByLastVersionNative();
+        Album album = null;
+        Object[] oQuery = daoAlbum.findByLastVersionNative();
+        if (oQuery != null){
+            album = new Album();
+            album.setAlbumId( (String) oQuery[0] );
+            album.setDate( (java.sql.Date) oQuery[1] );
+            album.setNumberDiseases( (Integer) oQuery[2] );
+        }
+        return album;
     }
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
@@ -107,18 +115,21 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source) {
         List<Disease> diseaseList = new ArrayList<>();
+        System.out.println(albumId +"|"+ version+"|"+source);
         List<Object[]> oQueryList = daoAlbum.findLinksByIdAndSourceNameNative(albumId, version, source);
-        for (Object[] dis: oQueryList) {
-            Disease disease = new Disease();
-            disease.setAlbumId( (String) dis[0] );
-            disease.setVersion( (Date) dis[1] );
-            disease.setDiseaseId( (String) dis[2] );
-            disease.setName( (String) dis[3] );
-            disease.setSourceId( (String) dis[4] );
-            disease.setSourceName( (String) dis[5] );
-            disease.setUrl( (String) dis[6] );
-            System.out.println(disease.getName() + " - " + disease.getUrl());
-            diseaseList.add(disease);
+        if (oQueryList != null) {
+            for (Object[] dis : oQueryList) {
+                Disease disease = new Disease();
+                disease.setAlbumId((String) dis[0]);
+                disease.setVersion((Date) dis[1]);
+                disease.setDiseaseId((String) dis[2]);
+                disease.setName((String) dis[3]);
+                disease.setSourceId((String) dis[4]);
+                disease.setSourceName((String) dis[5]);
+                disease.setUrl((String) dis[6]);
+                System.out.println(disease.getName() + " - " + disease.getUrl());
+                diseaseList.add(disease);
+            }
         }
         return diseaseList;
     }
@@ -137,8 +148,21 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
-    public List<Album> findAllQuery() {
-        return daoAlbum.findAllQuery();
+    public List<Album> findAllNative() {
+        List<Album> albums = null;
+        List<Object[]> allNative = daoAlbum.findAllNative();
+        if (allNative != null) {
+            for (Object[] alb : allNative) {
+                Album album = new Album();
+                album.setAlbumId((String) alb[0]);
+                album.setDate((java.sql.Date) alb[1]);
+                album.setNumberDiseases((Integer) alb[2]);
+                albums.add(album);
+            }
+        }
+        //if(source!=null)
+        //Hibernate.initialize(source.getDiseasesBySidsource());
+        return albums;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
@@ -173,7 +197,7 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Transactional(propagation= Propagation.REQUIRED)
     @Override
-    public int updateNumberDiseasesByIdNative(String albumId, Date version, int numberDiseases) {
-        return updateNumberDiseasesByIdNative(albumId, version, numberDiseases);
+    public int updateNumberDiseasesByIdNative(String albumId, Date version) {
+        return daoAlbum.updateNumberDiseasesByIdNative(albumId, version);
     }
 }

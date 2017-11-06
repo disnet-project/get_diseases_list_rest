@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @see
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "${my.service.rest.request.mapping.general.url}")
 public class ExtractionController {
 
     @Autowired
@@ -25,14 +25,14 @@ public class ExtractionController {
     private Populate populateService;
 
 
-    @RequestMapping(path = { "/disease_album/extract" }, //wikipedia extraction
+    @RequestMapping(path = { "/extract" }, //wikipedia extraction
             method = RequestMethod.GET)
     public String extract() throws Exception {
         getDiseasesFromDBPedia.getDiseasesFromDBPedia();
         return "Successful extraction and insertion in a DB!";
     }
 
-    @RequestMapping(path = { "/disease_album/populate" }, //wikipedia extraction
+    @RequestMapping(path = { "/populate" }, //wikipedia extraction
             method = RequestMethod.GET)
     public String populate() throws Exception {
         populateService.populate();

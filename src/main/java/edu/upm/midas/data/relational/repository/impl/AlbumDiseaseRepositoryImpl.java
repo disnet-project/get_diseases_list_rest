@@ -46,9 +46,9 @@ public class AlbumDiseaseRepositoryImpl extends AbstractDao<AlbumDiseasePK, Albu
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<AlbumDisease> findAllQuery() {
-        return (List<AlbumDisease>) getEntityManager()
-                .createNamedQuery("AlbumDisease.findAll")
+    public List<Object[]> findAllNative() {
+        return (List<Object[]>) getEntityManager()
+                .createNamedQuery("AlbumDisease.findAllNative")
                 .setMaxResults(0)
                 .getResultList();
     }

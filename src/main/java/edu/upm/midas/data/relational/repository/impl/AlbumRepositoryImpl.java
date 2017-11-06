@@ -67,9 +67,9 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
-    public Album findByLastVersionNative() {
-        Album album = null;
-        List<Album> albumList = (List<Album>) getEntityManager()
+    public Object[] findByLastVersionNative() {
+        Object[] album = null;
+        List<Object[]> albumList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("Album.findByLastVersionNative")
                 .getResultList();
         if (CollectionUtils.isNotEmpty(albumList))
@@ -196,9 +196,9 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Album> findAllQuery() {
-        return (List<Album>) getEntityManager()
-                .createNamedQuery("Album.findAll")
+    public List<Object[]> findAllNative() {
+        return (List<Object[]>) getEntityManager()
+                .createNamedQuery("Album.findAllNative")
                 .setMaxResults(0)
                 .getResultList();
     }
@@ -247,12 +247,11 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
     }
 
     @Override
-    public int updateNumberDiseasesByIdNative(String albumId, Date version, int numberDiseases) {
+    public int updateNumberDiseasesByIdNative(String albumId, Date version) {
         return getEntityManager()
                 .createNamedQuery("Album.updateNumberDiseasesByIdNative")
                 .setParameter("albumId", albumId)
                 .setParameter("version", version)
-                .setParameter("numberDiseases", numberDiseases)
                 .executeUpdate();
     }
 

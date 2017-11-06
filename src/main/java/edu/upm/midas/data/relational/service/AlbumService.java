@@ -46,7 +46,7 @@ public interface AlbumService {
 
     List<Album> findByMaxSizeNative();
     
-    List<Album> findAllQuery();
+    List<Album> findAllNative();
 
     void save(Album album);
 
@@ -58,6 +58,6 @@ public interface AlbumService {
 
     Album update(Album album);
 
-    int updateNumberDiseasesByIdNative(String albumId, Date version, int numberDiseases);
+    int updateNumberDiseasesByIdNative(String albumId, Date version);
 
 }

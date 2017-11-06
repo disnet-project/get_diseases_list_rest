@@ -21,7 +21,7 @@ public interface AlbumDiseaseRepository {
 
     Object[] findByIdNative(AlbumDiseasePK albumDiseasePK);
     
-    List<AlbumDisease> findAllQuery();
+    List<Object[]> findAllNative();
 
     void persist(AlbumDisease albumDisease);
 

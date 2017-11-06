@@ -37,11 +37,11 @@ public class AlbumDiseaseServiceImpl implements AlbumDiseaseService {
     public AlbumDisease findByIdNative(AlbumDiseasePK albumDiseasePK) {
         AlbumDisease albumDisease = null;
         Object[] oQuery = daoAlbumDisease.findByIdNative(albumDiseasePK);
-        if (oQuery != null){
+        if (oQuery != null) {
             albumDisease = new AlbumDisease();
-            albumDisease.setAlbumId( (String) oQuery[0] );
-            albumDisease.setDate( (java.sql.Date) oQuery[1] );
-            albumDisease.setDiseaseId( (String) oQuery[2] );
+            albumDisease.setAlbumId((String) oQuery[0]);
+            albumDisease.setDate((java.sql.Date) oQuery[1]);
+            albumDisease.setDiseaseId((String) oQuery[2]);
         }
         //if(source!=null)
         //Hibernate.initialize(source.getDiseasesBySidsource());
@@ -50,8 +50,21 @@ public class AlbumDiseaseServiceImpl implements AlbumDiseaseService {
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
-    public List<AlbumDisease> findAllQuery() {
-        return daoAlbumDisease.findAllQuery();
+    public List<AlbumDisease> findAllNative() {
+        List<AlbumDisease> albumDiseaseList = null;
+        List<Object[]> allNative = daoAlbumDisease.findAllNative();
+        if (allNative != null) {
+            for (Object[] alb : allNative) {
+                AlbumDisease albumDisease = new AlbumDisease();
+                albumDisease.setAlbumId((String) alb[0]);
+                albumDisease.setDate((java.sql.Date) alb[1]);
+                albumDisease.setDiseaseId((String) alb[2]);
+                albumDiseaseList.add(albumDisease);
+            }
+        }
+        //if(source!=null)
+        //Hibernate.initialize(source.getDiseasesBySidsource());
+        return albumDiseaseList;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

@@ -8,10 +8,13 @@ import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
 import edu.upm.midas.data.relational.entities.addb.AlbumPK;
 import edu.upm.midas.data.relational.service.AlbumDiseaseService;
 import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.model.response.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by gerardo on 31/10/2017.
@@ -71,5 +74,22 @@ public class AlbumHelper {
             albumDiseaseService.insertNative(albumDiseasePK.getAlbumId(), albumDiseasePK.getDate(), albumDiseasePK.getDiseaseId());
         }
     }
+
+
+    public void update(Album album){
+        albumService.updateNumberDiseasesByIdNative(album.getAlbumId(), album.getDate());
+    }
+
+    public List<Disease> findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(String albumId, Date version, String source){
+        List<Disease> diseases = albumService.findLinksByIdAndSourceNameNative(albumId, version, source);
+        for (Disease disease: diseases) {
+            String r = commonService.replaceSpecialCharactersToUnicode(disease.getUrl());
+            //System.out.println(r);
+            //System.out.println(commonService.replaceUnicodeToSpecialCharacters(r));
+            disease.setUrl( r );
+        }
+        return diseases;
+    }
+
 
 }

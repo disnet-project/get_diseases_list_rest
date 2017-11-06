@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by gerardo on 30/10/2017.
@@ -58,9 +59,10 @@ public class DiseaseHelper {
             return disease.getDiseaseId();
         }else {
             System.out.println("    Not Found");
-            System.out.println("LasId: "+getDiseaseId());
+
             //Inicia inserción de la enfermedad
             String lastDiseaseId = getDiseaseId();
+            System.out.println("LastId: "+ lastDiseaseId);
             diseaseService.insertNative(lastDiseaseId, dis.getName());
             //Se insertan urls de la enfermedad
             insertUrls(dis, lastDiseaseId);
@@ -87,6 +89,7 @@ public class DiseaseHelper {
             insertDiseaseUrl(3, "freebase", diseaseId, url, disease);
         }
     }
+
 
     public void insertDiseaseUrl(int sourceId, String sourceName, String diseaseId, String url, edu.upm.midas.model.extract.Disease disease){
         Url oUrl = null;
@@ -163,6 +166,7 @@ public class DiseaseHelper {
             insertDiseaseCode(codePK, diseaseId);
         }
     }
+
 
     public void insertDiseaseCode(CodePK codePK, String diseaseId){
         //insertar sus disease_code, si los tiene

@@ -25,7 +25,7 @@ public interface AlbumRepository {
 
     Date findLastVersionNative();
 
-    Album findByLastVersionNative();
+    Object[] findByLastVersionNative();
 
     List<Album> findByVersionGraterThanNative(Date version);
 
@@ -45,7 +45,7 @@ public interface AlbumRepository {
 
     List<Album> findByMaxSizeNative();
     
-    List<Album> findAllQuery();
+    List<Object[]> findAllNative();
 
     void persist(Album album);
 
@@ -59,7 +59,7 @@ public interface AlbumRepository {
 
     Album update(Album album);
 
-    int updateNumberDiseasesByIdNative(String albumId, Date version, int numberDiseases);
+    int updateNumberDiseasesByIdNative(String albumId, Date version);
 
     Integer updateByIdQuery(Album album);
     
