@@ -77,18 +77,18 @@ public class GetDiseasesFromDBPedia {
 				//System.out.println(dis.toString());
 				//System.out.println();
 
-//				System.out.println(v + ". Dis ==>|NAME:| " + dis.getName()
-//						+ " | DiseasesDB_CODE: | " +  dis.getDiseasesDBCode()
+				System.out.println(v + ".Dis==>|NAME:| " + dis.getName()
+//						+ " |DiseasesDB_CODE:| " +  dis.getDiseasesDBCode()
 //						+ " | eMedicine_CODE: | " + dis.geteMedicineCode()
 //						+ " | ICD9_CODE: | " + dis.getICD9Code()
 //						+ " | ICD10_CODE: | " + dis.getICD10Code()
 //						+ " | Mesh_CODE: | " + dis.getMeshCode()
 //						+ " | OMIM_CODE: | " + dis.getOMIMCode()
 //						+ " | MedlinePlus_CODE: | " + dis.getMedlinePlusCode()
-//						+ " |WIKIPEDIA_PAGE:|" + dis.getWikipediaPage()
+						+ " |WIKIPEDIA_PAGE:|" + dis.getWikipediaPage()
 //						+ " | DBPEDIA_PAGE: | " + dis.getURI()
 //						+ " | FREEBASE_PAGE | " + dis.getFreebaseURL()
-//				);
+				);
 
 				v++;
 			}

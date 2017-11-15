@@ -25,7 +25,7 @@ public class ExtractionController {
     private Populate populateService;
 
 
-    @RequestMapping(path = { "/extract" }, //wikipedia extraction
+    @RequestMapping(path = { "/retrieve " }, //wikipedia extraction
             method = RequestMethod.GET)
     public String extract() throws Exception {
         getDiseasesFromDBPedia.getDiseasesFromDBPedia();

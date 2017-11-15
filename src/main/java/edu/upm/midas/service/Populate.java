@@ -65,6 +65,7 @@ public class Populate {
                 while (it.hasNext()) {
                     Map.Entry<Code, Disease> ent = it.next();
                     Disease disease = ent.getValue();
+                    Code code = ent.getKey();
                     diseaseList.add(disease);
                     System.out.println(v + ". Insert disease: " + disease.getName());
                     String diseaseId = diseaseHelper.insertIfExist(disease);

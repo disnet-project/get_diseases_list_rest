@@ -44,7 +44,7 @@ public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
     @SuppressWarnings("unchecked")
     @Override
     public Object[] findByNameNative(String name) {
-        Object[] disease = null;
+        Object[] disease = null;System.out.println(name);
         List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("Disease.findByNameNative")
                 .setParameter("name", name)

@@ -1,7 +1,10 @@
 package edu.upm.midas.scheduling;
+import edu.upm.midas.common.util.TimeProvider;
+import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by gerardo on 03/11/2017.
@@ -12,10 +15,15 @@ import org.springframework.scheduling.annotation.Scheduled;
  * @className ExtractionScheduling
  * @see
  */
+@Component
 public class ExtractionScheduling {
 
     @Autowired
     private Populate populateService;
+    @Autowired
+    private GetDiseasesFromDBPedia getDiseasesFromDBPedia;
+    @Autowired
+    private TimeProvider timeProvider;
 
     /**
      * Método para extraer una nueva lista de enfermedades desde DBPedia y almacenar en la
@@ -46,12 +54,13 @@ public class ExtractionScheduling {
                 Se ejecuta cada 15 segundos los días sábados y domingos a media noche.
                 @Scheduled(cron = "0/15 * 0 ? * 6,7 ")
      */
-    @Scheduled(cron = "0 0 12 1 * ? ")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
+            System.out.println("Scheduled task for the first of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
             populateService.populate();
         }catch (Exception e){
-            System.out.println("getAlbumListERR (1stOfTheMonth): " + e.getMessage());
+            System.out.println("DISLISTERR (1stOfTheMonth): " + e.getMessage());
         }
     }
 
@@ -62,13 +71,31 @@ public class ExtractionScheduling {
      *
      * Se ejecutará cada día quince de cada mes a la 12:00 horas = @Scheduled(cron = "0 0 12 15 * ? ").
      */
-    @Scheduled(cron = "0 0 12 15 * ? ")
+    @Scheduled(cron = "0 0 0 15 * ?")
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
+            System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
             populateService.populate();
+        }catch (Exception e){
+            System.out.println("DISLISTERR (15thOfTheMonth): " + e.getMessage());
+        }
+    }
+
+    //TEST
+    //@Scheduled(cron = "0 0 12 15 * ?")
+    public void test() throws Exception {
+        try {
+            System.out.println("Tarea programada usando expresiones Con: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
+            getDiseasesFromDBPedia.getDiseasesFromDBPedia();
         }catch (Exception e){
             System.out.println("getAlbumListERR (15thOfTheMonth): " + e.getMessage());
         }
+    }
+
+    // Se ejecuta cada 3 segundos
+    //@Scheduled(fixedRate = 3000)
+    public void tarea1() {
+        System.out.println("Tarea usando fixedRate cada 3 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
     }
 
 }

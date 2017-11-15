@@ -1,4 +1,5 @@
 package edu.upm.midas.data.relational.entities.addb;
+
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 

@@ -23,7 +23,6 @@ public class TimeProvider {
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Date getNow(){
-        //return new Date(117, 05, 29);
         return new Date(new java.util.Date().getTime());
     }
 
