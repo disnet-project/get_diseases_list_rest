@@ -24,8 +24,6 @@ public class AlbumController {
     @Autowired
     private AlbumService albumService;
     @Autowired
-    private TimeProvider timeProviderService;
-    @Autowired
     private TokenAuthorization tokenAuthorization;
 
     @RequestMapping(path = { "/last" }, //wikipedia extraction

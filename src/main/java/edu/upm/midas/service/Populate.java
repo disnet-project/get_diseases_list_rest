@@ -97,6 +97,8 @@ public class Populate {
     public void writeJSONFile(String diseaseJsonBody, String albumId, String version) throws IOException {
         String fileName = version + "_" +albumId + TERMINATION;//adis = disease album
         String path = Constants.EXTRACTION_HISTORY_FOLDER + fileName;
+        InputStream in = getClass().getResourceAsStream(path);
+        //BufferedReader bL = new BufferedReader(new InputStreamReader(in));
         File file = new File(path);
         BufferedWriter bW;
 

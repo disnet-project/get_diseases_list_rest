@@ -5,6 +5,7 @@ import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by gerardo on 03/11/2017.
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Component;
  * @className ExtractionScheduling
  * @see
  */
-@Component
 public class ExtractionScheduling {
 
     @Autowired
@@ -54,7 +54,7 @@ public class ExtractionScheduling {
                 Se ejecuta cada 15 segundos los días sábados y domingos a media noche.
                 @Scheduled(cron = "0/15 * 0 ? * 6,7 ")
      */
-    @Scheduled(cron = "0 0 0 1 * ?")
+    //@Scheduled(cron = "0 0 0 1 * ?")
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled task for the first of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
@@ -71,7 +71,7 @@ public class ExtractionScheduling {
      *
      * Se ejecutará cada día quince de cada mes a la 12:00 horas = @Scheduled(cron = "0 0 12 15 * ? ").
      */
-    @Scheduled(cron = "0 0 0 15 * ?")
+    //@Scheduled(cron = "0 0 0 15 * ?")
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
@@ -82,10 +82,11 @@ public class ExtractionScheduling {
     }
 
     //TEST
-    //@Scheduled(cron = "0 0 12 15 * ?")
+    //@Scheduled(cron = "0 0 10 17 * ?")
+    //@Scheduled(fixedRate = 30000)
     public void test() throws Exception {
         try {
-            System.out.println("Tarea programada usando expresiones Con: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
+            System.out.println("Tarea programada usando expresiones Cron: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
             getDiseasesFromDBPedia.getDiseasesFromDBPedia();
         }catch (Exception e){
             System.out.println("getAlbumListERR (15thOfTheMonth): " + e.getMessage());
@@ -93,9 +94,9 @@ public class ExtractionScheduling {
     }
 
     // Se ejecuta cada 3 segundos
-    //@Scheduled(fixedRate = 3000)
+    //@Scheduled(fixedRate = 10000)
     public void tarea1() {
-        System.out.println("Tarea usando fixedRate cada 3 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
+        System.out.println("Tarea usando fixedRate cada 10 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
     }
 
 }

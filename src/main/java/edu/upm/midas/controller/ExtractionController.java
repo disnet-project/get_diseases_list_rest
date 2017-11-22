@@ -25,9 +25,10 @@ public class ExtractionController {
     private Populate populateService;
 
 
-    @RequestMapping(path = { "/retrieve " }, //wikipedia extraction
+    @RequestMapping(path = { "/retrieve" }, //wikipedia extraction
             method = RequestMethod.GET)
     public String extract() throws Exception {
+        System.out.println("retrieve");
         getDiseasesFromDBPedia.getDiseasesFromDBPedia();
         return "Successful extraction and insertion in a DB!";
     }
@@ -37,6 +38,13 @@ public class ExtractionController {
     public String populate() throws Exception {
         populateService.populate();
         return "Successful extraction and insertion in a DB!";
+    }
+
+    @RequestMapping(path = { "/test" }, //wikipedia extraction
+            method = RequestMethod.GET)
+    public String test() throws Exception {
+        populateService.writeJSONFile("hola GLG", "albumId", "myVersionGLG");
+        return "ESCRITO";
     }
 
 }

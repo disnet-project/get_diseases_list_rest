@@ -13,16 +13,23 @@ import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 import edu.upm.midas.constants.Constants;
 import edu.upm.midas.model.extract.Code;
 import edu.upm.midas.model.extract.Disease;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.Map.Entry;
 
 @Service
 public class GetDiseasesFromDBPedia {
+
+	@Autowired
+	private ResourceLoader resourceLoader;
 
 	private final String DISEASES_SPARQL_QUERY_FILE = Constants.DISEASES_SPARQL_QUERY_FILE;
 	private final String DBPEDIA_SPARQL_ENDPOINT = Constants.DBPEDIA_SPARQL_ENDPOINT;
@@ -191,7 +198,9 @@ public class GetDiseasesFromDBPedia {
 	 */
 	private String loadQuery(String f) throws Exception {
 		String str = "";
-		BufferedReader bL = new BufferedReader(new FileReader(f));
+		org.springframework.core.io.Resource fileResource =resourceLoader.getResource("classpath:" + f);
+		InputStream in = getClass().getResourceAsStream(f);
+		BufferedReader bL = new BufferedReader(new InputStreamReader(in));
 		while (bL.ready()) {
 			String rd = bL.readLine();
 			str += rd + "\n";
