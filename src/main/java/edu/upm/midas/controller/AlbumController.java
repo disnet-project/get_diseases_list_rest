@@ -27,7 +27,7 @@ public class AlbumController {
     public ResponseLA getDiseaseLinkListGET(@RequestParam(value = "token", required = false) String token,
                                             HttpServletRequest httpRequest,
                                             Device device) throws Exception {
-        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getServletPath(), httpRequest.getServletPath(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
         ResponseLA response = new ResponseLA();
         if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
             response.setAuthorized(responseFather.isAuthorized());
@@ -50,7 +50,7 @@ public class AlbumController {
     public ResponseLA getDiseaseLinkListPOST(@RequestBody @Valid RequestFather request,
                                                HttpServletRequest httpRequest,
                                                Device device) throws Exception {
-        ResponseFather responseFather = tokenAuthorization.validateService(request.getToken(), httpRequest.getServletPath(), httpRequest.getServletPath(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(request.getToken(), httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
         ResponseLA response = new ResponseLA();
         if (responseFather.isAuthorized()){
             response.setAuthorized(responseFather.isAuthorized());

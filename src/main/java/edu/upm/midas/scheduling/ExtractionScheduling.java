@@ -54,7 +54,7 @@ public class ExtractionScheduling {
                 Se ejecuta cada 15 segundos los días sábados y domingos a media noche.
                 @Scheduled(cron = "0/15 * 0 ? * 6,7 ")
      */
-    //@Scheduled(cron = "0 0 0 1 * ?")
+    @Scheduled(cron = "0 0 0 1 * ?")
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled task for the first of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
@@ -71,7 +71,7 @@ public class ExtractionScheduling {
      *
      * Se ejecutará cada día quince de cada mes a la 12:00 horas = @Scheduled(cron = "0 0 12 15 * ? ").
      */
-    //@Scheduled(cron = "0 0 0 15 * ?")
+    @Scheduled(cron = "0 0 0 15 * ?")
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());

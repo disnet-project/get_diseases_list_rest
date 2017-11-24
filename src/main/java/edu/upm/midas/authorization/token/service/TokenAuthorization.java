@@ -32,10 +32,10 @@ public class TokenAuthorization {
     private String authorization_path;
 
 
-    public ResponseFather validateService(String userToken, String request, String path, Device device){
+    public ResponseFather validateService(String userToken, String request, String url, Device device){
         ResponseFather response = new ResponseFather();
 //        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        String token = jwtTokenUtil.generateToken( userToken, request, path, device );
+        String token = jwtTokenUtil.generateToken( userToken, request, url, device );
 
         System.out.println( "Call Authorization API... (" + authorization_url + authorization_path + ")");
         ValidationResponse validationResponse = authResourceService.validationServiceByToken( token );

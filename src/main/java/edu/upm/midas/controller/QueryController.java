@@ -34,7 +34,7 @@ public class QueryController {
                                               HttpServletRequest httpRequest,
                                               Device device) throws Exception {
         Date dataVersion = timeProviderService.getSdf().parse(version);
-        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getServletPath(), httpRequest.getServletPath(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
             response.setAuthorized(responseFather.isAuthorized());
@@ -53,7 +53,7 @@ public class QueryController {
                                                HttpServletRequest httpRequest,
                                                Device device) throws Exception {
         Date dataVersion = timeProviderService.getSdf().parse(requestGDLL.getVersion());
-        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), httpRequest.getServletPath(), httpRequest.getServletPath(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         if (responseFather.isAuthorized()){
             response.setAuthorized(responseFather.isAuthorized());
