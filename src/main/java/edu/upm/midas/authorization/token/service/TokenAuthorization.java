@@ -4,7 +4,6 @@ import edu.upm.midas.authorization.model.ValidationResponse;
 import edu.upm.midas.authorization.service.AuthResourceService;
 import edu.upm.midas.authorization.token.component.JwtTokenUtil;
 import edu.upm.midas.model.response.ResponseFather;
-import edu.upm.midas.model.response.getDiseaseLinkList.ResponseGDLL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mobile.device.Device;
@@ -40,7 +39,7 @@ public class TokenAuthorization {
 
         System.out.println( "Call Authorization API... (" + authorization_url + authorization_path + ")");
         ValidationResponse validationResponse = authResourceService.validationServiceByToken( token );
-        response.setAuthorization( validationResponse.isAuthorized() );
+        response.setAuthorized( validationResponse.isAuthorized() );
         response.setAuthorizationMessage( validationResponse.getMessage() );
         response.setToken( userToken );
 

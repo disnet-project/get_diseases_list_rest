@@ -36,8 +36,8 @@ public class QueryController {
         Date dataVersion = timeProviderService.getSdf().parse(version);
         ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getServletPath(), httpRequest.getServletPath(), device);
         ResponseGDLL response = new ResponseGDLL();
-        if (responseFather.isAuthorization()){//Validar findLinksByIdAndSourceNameNative
-            response.setAuthorization(responseFather.isAuthorization());
+        if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
+            response.setAuthorized(responseFather.isAuthorized());
             response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
             response.setToken(responseFather.getToken());
             response.setDiseases(albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(albumId, dataVersion, source));
@@ -55,8 +55,8 @@ public class QueryController {
         Date dataVersion = timeProviderService.getSdf().parse(requestGDLL.getVersion());
         ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), httpRequest.getServletPath(), httpRequest.getServletPath(), device);
         ResponseGDLL response = new ResponseGDLL();
-        if (responseFather.isAuthorization()){
-            response.setAuthorization(responseFather.isAuthorization());
+        if (responseFather.isAuthorized()){
+            response.setAuthorized(responseFather.isAuthorized());
             response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
             response.setToken(responseFather.getToken());
             response.setDiseases(albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(requestGDLL.getAlbum(), dataVersion, requestGDLL.getSource()));
