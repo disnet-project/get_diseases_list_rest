@@ -32,7 +32,7 @@ public class Constants {
     /** Ruta del archivo XML source */
     public static final String DISEASES_SPARQL_QUERY_FILE = "/sparql/getDiseases.sparql";//"sparql/getDiseases.sparql";
     public static final String DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql";
-    public static final String EXTRACTION_HISTORY_FOLDER = "/tmp/extraction_history/";//"extraction_history/";
+    public static final String EXTRACTION_HISTORY_FOLDER = "tmp/extraction_history/";//"extraction_history/"; //real= /tmp/extraction_history/
 
     public static final String SEMANTIC_TYPES[] = { "IDC-9", "IDC-10", "DiseasesDB", "MeSH", "lbpr", "lbtr" };
 
