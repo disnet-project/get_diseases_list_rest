@@ -41,7 +41,7 @@ public class Populate {
     @Value("${my.service.extraction_history.dot_termination}")
     private String TERMINATION;
     @Autowired
-    private Common commonService;
+    private Common commonService;/*COMMENT*/
 
 
     /**
