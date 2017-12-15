@@ -1,6 +1,10 @@
 package edu.upm.midas.common.util;
 
+import edu.upm.midas.authorization.token.component.JwtTokenUtil;
+import edu.upm.midas.authorization.token.service.TokenAuthorization;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
@@ -20,6 +24,31 @@ import java.util.regex.Pattern;
  */
 @Service
 public class Common {
+
+    @Autowired
+    private TokenAuthorization tokenAuthorization;
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+    @Autowired
+    private Common common;
+
+
+    /**
+     * @param token
+     * @param start
+     * @param end
+     * @throws Exception
+     */
+    public void saveQueryRuntime(String token, String start, String end) throws Exception {
+        try {
+            //Aunque exista problema al insertar el runtime no hay problema con la ejecución de la consulta
+            String queryId = jwtTokenUtil.getQueryIdJWTDecode(token);
+            if (!common.isEmpty(queryId)) {
+                HttpStatus response = tokenAuthorization.updateQueryRuntime(queryId, start, end);
+                System.out.println(response);
+            }
+        }catch (Exception e){}
+    }
 
     public boolean isEmpty(String string) {
         if (string == null) {

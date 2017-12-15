@@ -1,5 +1,6 @@
 package edu.upm.midas.data.relational.entities.addb;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -184,6 +185,7 @@ public class Album {
     private String albumId;
     private Date date;
     private Integer numberDiseases;
+
     private List<AlbumDisease> albumDiseases;
 
     @Id

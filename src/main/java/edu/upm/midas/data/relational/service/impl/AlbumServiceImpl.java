@@ -65,11 +65,11 @@ public class AlbumServiceImpl implements AlbumService {
     }
 
     @Override
-    public Album findByLastVersionNative() {
-        Album album = null;
+    public edu.upm.midas.model.response.Album findByLastVersionNative() {
+        edu.upm.midas.model.response.Album album = null;
         Object[] oQuery = daoAlbum.findByLastVersionNative();
         if (oQuery != null){
-            album = new Album();
+            album = new edu.upm.midas.model.response.Album();
             album.setAlbumId( (String) oQuery[0] );
             album.setDate( (java.sql.Date) oQuery[1] );
             album.setNumberDiseases( (Integer) oQuery[2] );
@@ -115,7 +115,7 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source) {
         List<Disease> diseaseList = new ArrayList<>();
-        System.out.println(albumId +"|"+ version+"|"+source);
+        //System.out.println(albumId +"|"+ version+"|"+source);
         List<Object[]> oQueryList = daoAlbum.findLinksByIdAndSourceNameNative(albumId, version, source);
         if (oQueryList != null) {
             for (Object[] dis : oQueryList) {
@@ -127,7 +127,7 @@ public class AlbumServiceImpl implements AlbumService {
                 disease.setSourceId((String) dis[4]);
                 disease.setSourceName((String) dis[5]);
                 disease.setUrl((String) dis[6]);
-                System.out.println(disease.getName() + " - " + disease.getUrl());
+                //System.out.println(disease.getName() + " - " + disease.getUrl());
                 diseaseList.add(disease);
             }
         }

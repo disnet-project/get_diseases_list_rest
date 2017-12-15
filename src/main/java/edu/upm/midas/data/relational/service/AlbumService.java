@@ -26,7 +26,7 @@ public interface AlbumService {
 
     Date findLastVersionNative();
 
-    Album findByLastVersionNative();
+    edu.upm.midas.model.response.Album findByLastVersionNative();
 
     List<Album> findByVersionGraterThanNative(Date version);
 

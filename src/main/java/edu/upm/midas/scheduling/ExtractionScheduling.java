@@ -1,10 +1,10 @@
 package edu.upm.midas.scheduling;
+
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @className ExtractionScheduling
  * @see
  */
+@Service
 public class ExtractionScheduling {
 
     @Autowired
@@ -41,7 +42,10 @@ public class ExtractionScheduling {
             Segundos. En nuestro ejemplo tiene el valor 0. Acepta valores del 0-59 y caracteres especiales como , - * /
             Minutos. En nuestro ejemplo tiene el valor 9. Acepta valores del 0-59 y caracteres especiales como , - * /
             Hora. En nuestro ejemplo tiene el valor 23. Acepta valores del 0-23 y caracteres especiales como , - * /
-            Día del mes. En nuestro ejemplo tiene el caracter especial “?” el cual significa no definido ya que no deseamos que se ejecute un determinado día del mes, en su lugar deseamos que se ejecute un determinado día de la semana. Acepta valores del 1-31 y caracteres especiales como , - * ? /
+            Día del mes. En nuestro ejemplo tiene el caracter especial “?” el cual significa no definido
+             ya que no deseamos que se ejecute un determinado día del mes,
+             en su lugar deseamos que se ejecute un determinado día de la semana.
+             Acepta valores del 1-31 y caracteres especiales como , - * ? /
             Mes. En nuestro ejemplo tiene el caracter especial “*” el cuál significa todos , es decir, deseamos se ejecute todos los meses. Acepta valores del 1-12 o abreviaturas JAN-DEC y caracteres especiales como , - * /
             Día de la semana. En nuestro ejemplo tiene el valor 5, es decir, deseamos se ejecute el quinto día (Viernes). Acepta valores del 1-7 o abreviaturas SUN-SAT y caracteres especiales como , - * ? /
             El día del mes y el día de la semana son excluyentes, es decir que podemos definir solo uno de los dos, no ámbos. En nuestro ejemplo queremos que se ejecute siempre un día de la semana por lo tanto en la posición de día del mes asignaremos un “?” para indicar que no está definido.
@@ -71,7 +75,8 @@ public class ExtractionScheduling {
      *
      * Se ejecutará cada día quince de cada mes a la 12:00 horas = @Scheduled(cron = "0 0 12 15 * ? ").
      */
-    @Scheduled(cron = "0 0 0 15 * ?")
+    //@Scheduled(cron = "0 0 0 15 * ?")
+    @Scheduled(cron = "0 15 14 15 * ?" )
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
@@ -94,9 +99,9 @@ public class ExtractionScheduling {
     }
 
     // Se ejecuta cada 3 segundos
-    //@Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 3000)
     public void tarea1() {
-        System.out.println("Tarea usando fixedRate cada 10 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
+        System.out.println("Tarea usando fixedRate cada 3 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
     }
 
 }

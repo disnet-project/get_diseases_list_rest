@@ -1,7 +1,9 @@
 package edu.upm.midas.authorization.client.fallback;
 
 import edu.upm.midas.authorization.client.AuthClient;
+import edu.upm.midas.authorization.model.UpdateQueryRuntimeRequest;
 import edu.upm.midas.authorization.model.ValidationResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,6 +21,11 @@ public class AuthClientFallback implements AuthClient {
     @Override
     public ValidationResponse validationServiceByToken(String tokenService) {
         return new ValidationResponse();
+    }
+
+    @Override
+    public HttpStatus updateQueryRunTime(UpdateQueryRuntimeRequest request) {
+        return HttpStatus.NOT_FOUND;
     }
 }
 

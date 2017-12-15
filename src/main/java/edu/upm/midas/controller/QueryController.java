@@ -1,18 +1,24 @@
 package edu.upm.midas.controller;
 
 import edu.upm.midas.authorization.token.service.TokenAuthorization;
+import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.data.relational.service.helper.AlbumHelper;
 import edu.upm.midas.model.request.getDiseaseLinkList.RequestGDLL;
+import edu.upm.midas.model.response.ApiResponseError;
+import edu.upm.midas.model.response.Disease;
 import edu.upm.midas.model.response.ResponseFather;
 import edu.upm.midas.model.response.getDiseaseLinkList.ResponseGDLL;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.mobile.device.Device;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "${my.service.rest.request.mapping.general.url}")
@@ -21,9 +27,11 @@ public class QueryController {
     @Autowired
     private AlbumHelper albumHelper;
     @Autowired
-    private TimeProvider timeProviderService;
+    private TimeProvider timeProvider;
     @Autowired
     private TokenAuthorization tokenAuthorization;
+    @Autowired
+    private Common common;
 
     @RequestMapping(path = { "/get" }, //wikipedia extraction
             method = RequestMethod.GET)
@@ -33,15 +41,43 @@ public class QueryController {
                                               @RequestParam(value = "token", required = false) String token,
                                               HttpServletRequest httpRequest,
                                               Device device) throws Exception {
-        Date dataVersion = timeProviderService.getSdf().parse(version);
+        Date dataVersion = timeProvider.getSdf().parse(version);
         ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
+        List<ApiResponseError> errorsFound = new ArrayList<>();
+        List<Disease> diseases = new ArrayList<>();
+
+        response.setAuthorized(responseFather.isAuthorized());
+        response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
+        response.setToken(responseFather.getToken());
+
+        response.setDiseases(diseases);
+
         if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
-            response.setAuthorized(responseFather.isAuthorized());
-            response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
-            response.setToken(responseFather.getToken());
-            response.setDiseases(albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(albumId, dataVersion, source));
+            try {
+                String start = timeProvider.getTimestampFormat();
+                diseases = albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(errorsFound, albumId, dataVersion, source);
+                String end = timeProvider.getTimestampFormat();
+                if (diseases.size() > 0){
+                    response.setDiseases(diseases);
+                    response.setResponseCode(HttpStatus.OK.toString());
+                    response.setResponseMessage(HttpStatus.OK.getReasonPhrase());
+                    common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
+                }else{
+                    response.setResponseCode(HttpStatus.NOT_FOUND.toString());
+                    response.setResponseMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                    common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
+                }
+            }catch (Exception e){
+                response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+                response.setResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            }
+        }else{
+            response.setResponseCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString());
+            response.setResponseMessage(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.getReasonPhrase());
         }
+        response.setErrorsFound(errorsFound);
+
         return response;
         //return "Successful extraction and insertion in a DB!";
     }
@@ -52,15 +88,42 @@ public class QueryController {
     public ResponseGDLL getDiseaseLinkListPOST(@RequestBody @Valid RequestGDLL requestGDLL,
                                                HttpServletRequest httpRequest,
                                                Device device) throws Exception {
-        Date dataVersion = timeProviderService.getSdf().parse(requestGDLL.getVersion());
-        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
+        Date dataVersion = timeProvider.getSdf().parse(requestGDLL.getVersion());//httpRequest.getQueryString() = request
+        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), RequestMethod.POST.toString(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
-        if (responseFather.isAuthorized()){
-            response.setAuthorized(responseFather.isAuthorized());
-            response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
-            response.setToken(responseFather.getToken());
-            response.setDiseases(albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(requestGDLL.getAlbum(), dataVersion, requestGDLL.getSource()));
+        List<ApiResponseError> errorsFound = new ArrayList<>();
+        List<Disease> diseases = new ArrayList<>();
+
+        response.setAuthorized(responseFather.isAuthorized());
+        response.setAuthorizationMessage(responseFather.getAuthorizationMessage());
+        response.setToken(responseFather.getToken());
+
+        response.setDiseases(diseases);
+
+        if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
+            try {
+                String start = timeProvider.getTimestampFormat();
+                diseases = albumHelper.findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(errorsFound, requestGDLL.getAlbum(), dataVersion, requestGDLL.getSource());
+                String end = timeProvider.getTimestampFormat();
+                if (diseases.size() > 0){
+                    response.setDiseases(diseases);
+                    response.setResponseCode(HttpStatus.OK.toString());
+                    response.setResponseMessage(HttpStatus.OK.getReasonPhrase());
+                    common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
+                }else{
+                    response.setResponseCode(HttpStatus.NOT_FOUND.toString());
+                    response.setResponseMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                    common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
+                }
+            }catch (Exception e){
+                response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+                response.setResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            }
+        }else{
+            response.setResponseCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString());
+            response.setResponseMessage(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.getReasonPhrase());
         }
+        response.setErrorsFound(errorsFound);
         return response;
         //return "Successful extraction and insertion in a DB!";
     }

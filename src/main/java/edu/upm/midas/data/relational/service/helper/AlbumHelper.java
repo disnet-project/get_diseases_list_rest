@@ -1,4 +1,5 @@
 package edu.upm.midas.data.relational.service.helper;
+import com.google.common.base.Throwables;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.common.util.UniqueId;
@@ -8,11 +9,15 @@ import edu.upm.midas.data.relational.entities.addb.AlbumDiseasePK;
 import edu.upm.midas.data.relational.entities.addb.AlbumPK;
 import edu.upm.midas.data.relational.service.AlbumDiseaseService;
 import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.enums.ApiErrorEnum;
+import edu.upm.midas.model.response.ApiResponseError;
 import edu.upm.midas.model.response.Disease;
+import edu.upm.midas.service.error.ErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +44,8 @@ public class AlbumHelper {
     private Common commonService;
     @Autowired
     private TimeProvider timeProviderService;
+    @Autowired
+    private ErrorService errorService;
 
 
 
@@ -80,13 +87,27 @@ public class AlbumHelper {
         albumService.updateNumberDiseasesByIdNative(album.getAlbumId(), album.getDate());
     }
 
-    public List<Disease> findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(String albumId, Date version, String source){
-        List<Disease> diseases = albumService.findLinksByIdAndSourceNameNative(albumId, version, source);
-        for (Disease disease: diseases) {
-            String r = commonService.replaceSpecialCharactersToUnicode(disease.getUrl());
-            //System.out.println(r);
-            //System.out.println(commonService.replaceUnicodeToSpecialCharacters(r));
-            disease.setUrl( r );
+    public List<Disease> findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(List<ApiResponseError> apiResponseErrors, String albumId, Date version, String source){
+        List<Disease> diseases = new ArrayList<>();
+        try {
+            diseases = albumService.findLinksByIdAndSourceNameNative(albumId, version, source);
+            if (diseases.size() > 0) {
+                for (Disease disease : diseases) {
+                    String r = commonService.replaceSpecialCharactersToUnicode(disease.getUrl());
+                    //System.out.println(r);
+                    //System.out.println(commonService.replaceUnicodeToSpecialCharacters(r));
+                    disease.setUrl(r);
+                }
+            }
+        }catch (Exception e){
+            //Se agrega el error en la lista principal de la respuesta
+            errorService.insertApiErrorEnumGenericError(
+                    apiResponseErrors,
+                    ApiErrorEnum.INTERNAL_SERVER_ERROR,
+                    Throwables.getRootCause(e).getClass().getName(),
+                    e.getMessage(),
+                    true,
+                    null);
         }
         return diseases;
     }
