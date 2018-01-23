@@ -75,8 +75,8 @@ public class ExtractionScheduling {
      *
      * Se ejecutará cada día quince de cada mes a la 12:00 horas = @Scheduled(cron = "0 0 12 15 * ? ").
      */
-    //@Scheduled(cron = "0 0 0 15 * ?")
-    @Scheduled(cron = "0 15 14 15 * ?" )
+    //@Scheduled(cron = "0 15 14 15 * ?" )
+    @Scheduled(cron = "0 0 0 15 * ?")
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
@@ -89,6 +89,7 @@ public class ExtractionScheduling {
     //TEST
     //@Scheduled(cron = "0 0 10 17 * ?")
     //@Scheduled(fixedRate = 30000)
+    //@Scheduled(cron = "0 15 11 18 * ?" )
     public void test() throws Exception {
         try {
             System.out.println("Tarea programada usando expresiones Cron: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
@@ -99,7 +100,7 @@ public class ExtractionScheduling {
     }
 
     // Se ejecuta cada 3 segundos
-    @Scheduled(fixedRate = 3000)
+    //@Scheduled(fixedRate = 3000)
     public void tarea1() {
         System.out.println("Tarea usando fixedRate cada 3 segundos - " + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
     }

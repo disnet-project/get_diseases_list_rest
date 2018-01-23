@@ -39,6 +39,27 @@ public class UrlRepositoryImpl extends AbstractDao<String, Url>
         return url;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public Url findByUrlNative(String url) {
+        Url url_ = null;
+        List<Object[]> urlList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Url.findByUrlNative")
+                .setParameter("url", url)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(urlList)) {
+            url_ = createUrl(urlList.get(0));
+        }
+        return url_;
+    }
+
+    public Url createUrl(Object[] obj){
+        Url url = new Url();
+        url.setUrlId((String) obj[0]);
+        url.setUrl((String) obj[1]);
+        return url;
+    }
+
     @Override
     public void persist(Url url) {
         super.persist(url);

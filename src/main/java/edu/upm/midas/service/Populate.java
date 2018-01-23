@@ -67,7 +67,8 @@ public class Populate {
                     Disease disease = ent.getValue();
                     Code code = ent.getKey();
                     diseaseList.add(disease);
-                    System.out.println(v + ". Insert disease: " + disease.getName());
+                    //if (disease.getName().equals("Köhler disease")){
+                    System.out.println(v + ". Insert disease: " + disease.getName() + " - " + disease.getWikipediaPage());
                     String diseaseId = diseaseHelper.insertIfExist(disease);
                     albumHelper.insertDiseases(album, diseaseId);
                     v++;
@@ -81,6 +82,28 @@ public class Populate {
                 System.out.println("ERR.album empty!");
             }
         }
+
+//        if (diseases != null) {
+//            System.out.println("-------------------- POPULATE DATABASE --------------------");
+//            System.out.println("Populate start...");
+//            Set<Map.Entry<Code, Disease>> allDS = diseases.entrySet();
+//            Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
+//                int v = 0;
+//                while (it.hasNext()) {
+//                    Map.Entry<Code, Disease> ent = it.next();
+//                    Disease disease = ent.getValue();
+//                    Code code = ent.getKey();
+//                    diseaseList.add(disease);
+//                    System.out.println(v + ". Insert disease: " + disease.getName() + " - " + disease.getWikipediaPage());
+//                    v++;
+//                }
+//                //System.out.println(gson.toJson(diseaseList));
+//                System.out.println("Total: " + v);
+//                System.out.println("End polulation.");
+//            } else {
+//                System.out.println("ERR.album empty!");
+//            }
+
 
 
     }

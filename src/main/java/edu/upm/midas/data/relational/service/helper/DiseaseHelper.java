@@ -76,29 +76,35 @@ public class DiseaseHelper {
         String url = disease.getWikipediaPage();
         //Comprobar si existe la url de wikipedia
         if (!commonService.isEmpty(url)){//sourceId: 1 = wikipedia
-            insertDiseaseUrl(1, "wikipedia", diseaseId, url, disease);
+            System.out.println("wiki" + disease.getWikipediaPage());
+            insertDiseaseUrl(1, "wikipedia", diseaseId, /*disease.getWikipediaPage()*/url, disease);
         }
         //Se inserta url de dbpedia
         url = disease.getURI();
         if (!commonService.isEmpty(url)){//2 = dbpedia
-            insertDiseaseUrl(2, "dbpedia", diseaseId, url, disease);
+            System.out.println("wiki" + disease.getURI());
+            insertDiseaseUrl(2, "dbpedia", diseaseId, /*disease.getURI()*/url, disease);
         }
         //Se inserta url de freebase
         url = disease.getFreebaseURL();
         if (!commonService.isEmpty(url)){//3 = freebase
-            insertDiseaseUrl(3, "freebase", diseaseId, url, disease);
+            System.out.println("wiki" + disease.getFreebaseURL());
+            insertDiseaseUrl(3, "freebase", diseaseId, /*disease.getFreebaseURL()*/url, disease);
         }
     }
 
 
     public void insertDiseaseUrl(int sourceId, String sourceName, String diseaseId, String url, edu.upm.midas.model.extract.Disease disease){
         Url oUrl = null;
+        Url oUrl_;
         //Se obtiene el id de la url a insertar
         String urlId = uniqueIdService.generateUrl(diseaseId, sourceId);
         //Se verifica que no existe el id
+        //NO SE QUE HACER
         oUrl = urlService.findByIdNative(urlId);
+        oUrl_ = urlService.findByUrlNative(url);
         //Si no existe se inserta
-        if (oUrl == null){
+        if (oUrl == null){System.out.println("ENTRA");
             //Inserta url
             urlService.insertNative(urlId, url);
             //Busca el id de la fuente wikipedia
@@ -114,7 +120,7 @@ public class DiseaseHelper {
                 //Inserta disease_url
                 diseaseUrlService.insertNative(diseaseId, urlId, sourceId_);
             }
-        }
+        }else{System.out.println("FUERA");}
     }
 
 

@@ -1,9 +1,11 @@
 package edu.upm.midas.data.relational.repository.impl;
+import edu.upm.midas.common.util.Common;
 import edu.upm.midas.data.relational.entities.addb.Disease;
 import edu.upm.midas.data.relational.repository.AbstractDao;
 import edu.upm.midas.data.relational.repository.DiseaseRepository;
 import edu.upm.midas.data.relational.repository.DiseaseUrlRepository;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,6 +22,9 @@ import java.util.List;
 @Repository("DiseaseRepositoryDao")
 public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
                                     implements DiseaseRepository {
+
+    @Autowired
+    private Common common;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -63,10 +68,20 @@ public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
     @SuppressWarnings("unchecked")
     @Override
     public String findLastIdNative() {
-        return  (String) getEntityManager()
+        String id = "";
+        Object[] idObject;
+        List<Object[]> res =  (List<Object[]>) getEntityManager()
                 .createNamedQuery("Disease.findLastIdNative")
                 .setMaxResults(1)
-                .getSingleResult();
+                .getResultList();
+
+        if (CollectionUtils.isNotEmpty(res)) {
+            System.out.println("RESS: "+res.get(0));
+            idObject = res.get(0);
+            id = idObject[0].toString();
+        }
+
+        return id;
     }
 
     @SuppressWarnings("unchecked")

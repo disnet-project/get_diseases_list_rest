@@ -37,6 +37,12 @@ public class UrlServiceImpl implements UrlService {
         return url;
     }
 
+    @Override
+    public Url findByUrlNative(String url) {
+        Url url_ = daoUrl.findByUrlNative(url);
+        return url_;
+    }
+
     @Transactional(propagation= Propagation.REQUIRED)
     public void save(Url url) {
         daoUrl.persist(url);

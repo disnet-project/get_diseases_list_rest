@@ -20,6 +20,8 @@ public interface UrlRepository {
 
     Url findByIdNative(String urlId);
 
+    Url findByUrlNative(String url);
+
     void persist(Url url);
 
     int insertNative(String urlId, String url);

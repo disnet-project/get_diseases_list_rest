@@ -18,6 +18,8 @@ public interface UrlService {
 
     Url findByIdNative(String urlId);
 
+    Url findByUrlNative(String url);
+
     void save(Url url);
 
     int insertNative(String urlId, String url);

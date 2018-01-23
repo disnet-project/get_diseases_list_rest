@@ -40,10 +40,9 @@ import java.util.Objects;
                 resultClass = Url.class
         ),
         @NamedNativeQuery(
-                name = "Url.findByUrlNativeResultClass",
+                name = "Url.findByUrlNative",
                 query = "SELECT u.url_id, u.url "
-                        + "FROM url u WHERE u.url COLLATE utf8_bin = :url",
-                resultClass = Url.class
+                        + "FROM url u WHERE u.url COLLATE utf8_bin = :url"
         ),
 
         @NamedNativeQuery(

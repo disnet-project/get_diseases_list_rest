@@ -1,5 +1,6 @@
 package edu.upm.midas.controller;
 
+import com.google.gson.Gson;
 import edu.upm.midas.authorization.token.component.JwtTokenUtil;
 import edu.upm.midas.authorization.token.service.TokenAuthorization;
 import edu.upm.midas.common.util.Common;
@@ -41,7 +42,8 @@ public class AlbumController {
     public ResponseLA getDiseaseLinkListGET(@RequestParam(value = "token", required = false) String token,
                                             HttpServletRequest httpRequest,
                                             Device device) throws Exception {
-        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
+        //System.out.println(httpRequest.getMethod());
+        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseLA response = new ResponseLA();
         List<ApiResponseError> errorsFound = new ArrayList<>();
         Album album = new Album();
@@ -88,7 +90,10 @@ public class AlbumController {
                                                HttpServletRequest httpRequest,
                                                Device device) throws Exception {
         //System.out.println("path: "+httpRequest.getRequestURI());
-        ResponseFather responseFather = tokenAuthorization.validateService(request.getToken(), RequestMethod.POST.toString(), httpRequest.getRequestURL().toString(), device);
+        //System.out.println(httpRequest.getMethod() + " " + RequestMethod.POST.toString());
+        Gson gson = new Gson();
+        String requestJSON = gson.toJson(request);
+        ResponseFather responseFather = tokenAuthorization.validateService(request.getToken(), requestJSON, httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseLA response = new ResponseLA();
 
         List<ApiResponseError> errorsFound = new ArrayList<>();

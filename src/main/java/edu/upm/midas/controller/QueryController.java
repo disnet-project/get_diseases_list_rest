@@ -1,5 +1,6 @@
 package edu.upm.midas.controller;
 
+import com.google.gson.Gson;
 import edu.upm.midas.authorization.token.service.TokenAuthorization;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
@@ -42,7 +43,7 @@ public class QueryController {
                                               HttpServletRequest httpRequest,
                                               Device device) throws Exception {
         Date dataVersion = timeProvider.getSdf().parse(version);
-        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getRequestURL().toString(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         List<ApiResponseError> errorsFound = new ArrayList<>();
         List<Disease> diseases = new ArrayList<>();
@@ -88,8 +89,10 @@ public class QueryController {
     public ResponseGDLL getDiseaseLinkListPOST(@RequestBody @Valid RequestGDLL requestGDLL,
                                                HttpServletRequest httpRequest,
                                                Device device) throws Exception {
+        Gson gson = new Gson();
+        String requestJSON = gson.toJson(requestGDLL);
         Date dataVersion = timeProvider.getSdf().parse(requestGDLL.getVersion());//httpRequest.getQueryString() = request
-        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), RequestMethod.POST.toString(), httpRequest.getRequestURL().toString(), device);
+        ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), requestJSON, httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         List<ApiResponseError> errorsFound = new ArrayList<>();
         List<Disease> diseases = new ArrayList<>();
