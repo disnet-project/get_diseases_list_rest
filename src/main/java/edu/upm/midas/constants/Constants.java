@@ -35,6 +35,7 @@ public class Constants {
     public static final String EXTRACTION_HISTORY_FOLDER = "tmp/extraction_history/";//"extraction_history/"; //real= /tmp/extraction_history/
 
     public static final String SEMANTIC_TYPES[] = { "IDC-9", "IDC-10", "DiseasesDB", "MeSH", "lbpr", "lbtr" };
+    public static final String INVALID_CODES[] = { "*", "," , "—", "–", "{}", "-1", "-"};
 
 
 }

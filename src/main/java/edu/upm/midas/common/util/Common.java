@@ -2,6 +2,7 @@ package edu.upm.midas.common.util;
 
 import edu.upm.midas.authorization.token.component.JwtTokenUtil;
 import edu.upm.midas.authorization.token.service.TokenAuthorization;
+import edu.upm.midas.constants.Constants;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,6 +64,13 @@ public class Common {
             }
 
         }
+    }
+
+    public boolean isInvalidCode(String code){
+        for (String i_code: Constants.INVALID_CODES){
+            if (code.trim().equals(i_code)) return true;
+        }
+        return false;
     }
 
     public String cutString(String str) {

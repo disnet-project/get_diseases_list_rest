@@ -77,8 +77,8 @@ public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
 
         if (CollectionUtils.isNotEmpty(res)) {
             System.out.println("RESS: "+res.get(0));
-            idObject = res.get(0);
-            id = idObject[0].toString();
+            id = String.valueOf(res.get(0));
+            //id = idObject[0].toString();
         }
 
         return id;

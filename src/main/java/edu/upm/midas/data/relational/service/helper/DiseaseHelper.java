@@ -100,11 +100,10 @@ public class DiseaseHelper {
         //Se obtiene el id de la url a insertar
         String urlId = uniqueIdService.generateUrl(diseaseId, sourceId);
         //Se verifica que no existe el id
-        //NO SE QUE HACER
         oUrl = urlService.findByIdNative(urlId);
         oUrl_ = urlService.findByUrlNative(url);
         //Si no existe se inserta
-        if (oUrl == null){System.out.println("ENTRA");
+        if (oUrl == null && oUrl_ == null){System.out.println("ENTRA");
             //Inserta url
             urlService.insertNative(urlId, url);
             //Busca el id de la fuente wikipedia
@@ -120,38 +119,66 @@ public class DiseaseHelper {
                 //Inserta disease_url
                 diseaseUrlService.insertNative(diseaseId, urlId, sourceId_);
             }
-        }else{System.out.println("FUERA");}
+        }else if (oUrl != null && oUrl_ == null){System.out.println("FUERA ALTERNATIVE");
+            urlId = verifyId(diseaseId, sourceId);
+            //Inserta url
+            urlService.insertNative(urlId, url);
+            //Busca el id de la fuente wikipedia
+            String sourceId_ = sourceService.findIdByNameNative(sourceName);
+            //Forma la llave de disease_url para buscar
+            DiseaseUrlPK diseaseUrlPK = new DiseaseUrlPK();
+            diseaseUrlPK.setDiseaseId(diseaseId);
+            diseaseUrlPK.setUrlId(urlId);
+            diseaseUrlPK.setSourceId(sourceId_);
+            //Buscar si existe disease_url para no insertarla
+            DiseaseUrl diseaseUrl = diseaseUrlService.findById(diseaseUrlPK);
+            if (diseaseUrl == null) {
+                //Inserta disease_url
+                diseaseUrlService.insertNative(diseaseId, urlId, sourceId_);
+            }
+        }
+    }
+
+    public String verifyId(String diseaseId, int sourceId){
+        //Se obtiene el id de la url a insertar + 1
+        Url oUrl;
+        String urlId = "";
+        do {
+            urlId = uniqueIdService.generateUrl_alternative(diseaseId, sourceId);
+            oUrl = urlService.findByIdNative(urlId);
+        }while (oUrl != null);
+        return urlId;
     }
 
 
     public void insertCodes(edu.upm.midas.model.extract.Disease disease, String diseaseId){
         String codeId = disease.getDiseasesDBCode();
         //Comprobar si existe
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("DiseasesDB", codeId, diseaseId, disease);
         }
         codeId = disease.geteMedicineCode();
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("eMedicine", codeId, diseaseId, disease);
         }
         codeId = disease.getICD9Code();
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("IDC-9", codeId, diseaseId, disease);
         }
         codeId = disease.getICD10Code();
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("IDC-10", codeId, diseaseId, disease);
         }
         codeId = disease.getMeshCode();
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("MeSH", codeId, diseaseId, disease);
         }
         codeId = disease.getOMIMCode();
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("OMIM", codeId, diseaseId, disease);
         }
         codeId = disease.getMedlinePlusCode()+"";
-        if (!commonService.isEmpty(codeId)){
+        if (!commonService.isEmpty(codeId) && !commonService.isInvalidCode(codeId)){
             insertCodesResource("MedlinePlus", codeId, diseaseId, disease);
         }
     }

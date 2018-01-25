@@ -54,6 +54,11 @@ public class UniqueId {
         return id + ".URL" + u;
     }
 
+    public String generateUrl_alternative(String id, int url){
+        String u = (url < 10)?String.format("%02d", url):url+"";
+        return id + ".URL" + u + generate(4);
+    }
+
     public String generateConfiguration(String id, int url){
         String u = (url < 10)?String.format("%02d", url):url+"";
         return id + ".U" + u;
