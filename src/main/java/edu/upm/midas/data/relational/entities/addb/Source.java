@@ -80,6 +80,7 @@ public class Source {
     private String sourceId;
     private String name;
     private List<DiseaseUrl> diseaseUrlsBySourceId;
+    private List<SafeDiseaseUrl> safeDiseaseUrlsBySourceId;
 
     @Id
     @Column(name = "source_id", nullable = false, length = 10)
@@ -122,5 +123,14 @@ public class Source {
 
     public void setDiseaseUrlsBySourceId(List<DiseaseUrl> diseaseUrlsBySourceId) {
         this.diseaseUrlsBySourceId = diseaseUrlsBySourceId;
+    }
+
+    @OneToMany(mappedBy = "sourceBySourceId")
+    public List<SafeDiseaseUrl> getSafeDiseaseUrlsBySourceId() {
+        return safeDiseaseUrlsBySourceId;
+    }
+
+    public void setSafeDiseaseUrlsBySourceId(List<SafeDiseaseUrl> safeDiseaseUrlsBySourceId) {
+        this.safeDiseaseUrlsBySourceId = safeDiseaseUrlsBySourceId;
     }
 }

@@ -81,6 +81,8 @@ public class Populate {
             } else {
                 System.out.println("ERR.album empty!");
             }
+            //Consultar la lista segura, hacer una comparación entre la lista segura y la recien insertada
+            // e insertar aquellas enfermedades que no estan cerrar el album
         }
 
 //        if (diseases != null) {
