@@ -62,7 +62,7 @@ public class DiseaseHelper {
 
             //Inicia inserción de la enfermedad
             String lastDiseaseId = getDiseaseId();
-            System.out.println("LastId: "+ lastDiseaseId);
+            //System.out.println("LastId: "+ lastDiseaseId);
             diseaseService.insertNative(lastDiseaseId, dis.getName());
             //Se insertan urls de la enfermedad
             insertUrls(dis, lastDiseaseId);
@@ -76,19 +76,19 @@ public class DiseaseHelper {
         String url = disease.getWikipediaPage();
         //Comprobar si existe la url de wikipedia
         if (!commonService.isEmpty(url)){//sourceId: 1 = wikipedia
-            System.out.println("wiki" + disease.getWikipediaPage());
+            //System.out.println("wiki" + disease.getWikipediaPage());
             insertDiseaseUrl(1, "wikipedia", diseaseId, /*disease.getWikipediaPage()*/url, disease);
         }
         //Se inserta url de dbpedia
         url = disease.getURI();
         if (!commonService.isEmpty(url)){//2 = dbpedia
-            System.out.println("wiki" + disease.getURI());
+            //System.out.println("wiki" + disease.getURI());
             insertDiseaseUrl(2, "dbpedia", diseaseId, /*disease.getURI()*/url, disease);
         }
         //Se inserta url de freebase
         url = disease.getFreebaseURL();
         if (!commonService.isEmpty(url)){//3 = freebase
-            System.out.println("wiki" + disease.getFreebaseURL());
+            //System.out.println("wiki" + disease.getFreebaseURL());
             insertDiseaseUrl(3, "freebase", diseaseId, /*disease.getFreebaseURL()*/url, disease);
         }
     }
@@ -103,7 +103,7 @@ public class DiseaseHelper {
         oUrl = urlService.findByIdNative(urlId);
         oUrl_ = urlService.findByUrlNative(url);
         //Si no existe se inserta
-        if (oUrl == null && oUrl_ == null){System.out.println("ENTRA");
+        if (oUrl == null && oUrl_ == null){//System.out.println("ENTRA");
             //Inserta url
             urlService.insertNative(urlId, url);
             //Busca el id de la fuente wikipedia
@@ -119,7 +119,7 @@ public class DiseaseHelper {
                 //Inserta disease_url
                 diseaseUrlService.insertNative(diseaseId, urlId, sourceId_);
             }
-        }else if (oUrl != null && oUrl_ == null){System.out.println("FUERA ALTERNATIVE");
+        }else if (oUrl != null && oUrl_ == null){//System.out.println("FUERA ALTERNATIVE");
             urlId = verifyId(diseaseId, sourceId);
             //Inserta url
             urlService.insertNative(urlId, url);

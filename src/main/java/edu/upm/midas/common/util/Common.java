@@ -46,7 +46,7 @@ public class Common {
             String queryId = jwtTokenUtil.getQueryIdJWTDecode(token);
             if (!common.isEmpty(queryId)) {
                 HttpStatus response = tokenAuthorization.updateQueryRuntime(queryId, start, end);
-                System.out.println(response);
+                //System.out.println(response);
             }
         }catch (Exception e){}
     }
