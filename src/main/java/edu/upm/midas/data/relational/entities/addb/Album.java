@@ -134,6 +134,25 @@ import java.util.Objects;
                 "AND s.name = :sourceName "
 
         ),
+        //Retornar enlaces que no tengan códigos válidos 5032
+        // ,es decir, quitar todos aquellos que están muy lejos de ser artículos de enfermedades
+        // esta no es la solución
+        @NamedNativeQuery(
+        name = "Album.findLinksWithoutCodesByIdAndSourceNameNative",
+        query = "SELECT DISTINCT dis_s.disease_id, dis_s.name, u_s.url-- , c_s.code_id, r_s.name \n" +
+                "FROM album_disease ad_s \n" +
+                "INNER JOIN disease dis_s on dis_s.disease_id = ad_s.disease_id " +
+                "INNER JOIN disease_url du_s on du_s.disease_id = dis_s.disease_id " +
+                "INNER JOIN url u_s on u_s.url_id = du_s.url_id " +
+                "INNER JOIN source s_s on s_s.source_id = du_s.source_id " +
+                "INNER JOIN disease_code dc_s on dc_s.disease_id = dis_s.disease_id " +
+                "INNER JOIN code c_s on c_s.code_id = dc_s.code_id AND c_s.resource_id = dc_s.resource_id " +
+                "INNER JOIN resource r_s on r_s.resource_id = c_s.resource_id " +
+                "WHERE ad_s.album_id = :albumId " +
+                "AND s_s.name = :sourceName " +
+                "-- and c_s.code_id != '-1' and c_s.code_id != '—' and c_s.code_id != '–' and c_s.code_id != '{}' and c_s.code_id != '' "
+
+        ),
 
 
 
