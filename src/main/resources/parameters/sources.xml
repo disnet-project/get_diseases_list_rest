@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sources>
+    <source consult="y" id="1">
+        <name>wikipedia</name>
+        <link>https://es.wikipedia.org/wiki/Wikipedia:Portada</link>
+        <sections consult="y" type="h2" class="mw-headline">
+            <section consult="y" id="Signs_and_symptoms" type="span" name="Signs and symptoms" />
+            <section consult="y" id="signs_and_symptoms" type="span" name="signs and symptoms" />
+            <section consult="y" id="Sign" type="span" name="Sign" />
+            <section consult="y" id="Signs" type="span" name="Signs" />
+            <section consult="y" id="Symptom" type="span" name="Symptom" />
+            <section consult="y" id="Symptoms" type="span" name="Symptoms" />
+            <section consult="y" id="Cause" type="span" name="Cause" />
+            <section consult="y" id="Causes" type="span" name="Causes" />
+            <section consult="y" id="Diagnosis" type="span" name="Diagnosis" />
+            <section consult="y" id="Diagnostic_approach" type="span" name="Diagnostic approach" />
+            <section consult="y" id="Presentation" type="span" name="Presentation" />
+        </sections>
+        <highlights consult="y">
+            <tag consult="y" id="content" class="mw-body" type="div" desc="principal" />
+            <tag consult="y" id="firstHeading" class="firstHeading" type="h1" desc="diseasename" />
+            <tag consult="y" id="mw-content-text" class="mw-content-ltr" type="div" desc="text" />
+            <tag consult="y" id="infobox" class="infobox" type="table" desc="infobox" />
+            <tag consult="y" id="wikitable" class="wikitable" type="table" desc="wikitable" />
+            <tag consult="y" id="toc" class="toc" type="div" desc="content" />
+            <tag consult="y" id="external text" class="external text" type="a" desc="externalresoruce" />
+            <tag consult="y" id="plainlist" class="plainlist" type="td" desc="plainlist" />
+            <tag consult="y" id="hlist" class="hlist" type="div" desc="horizontallist" />
+            <tag consult="y" id="hlist" class="hlist hlist-separated" type="div" desc="horizontallist_v1" />
+            <tag consult="y" id="text-align:center" class="style" type="css" desc="textaligncenter" />
+        </highlights>
+        <links consult="y">
+            <link consult="y" id="1">http://en.wikipedia.org/wiki/Lists_of_diseases</link>
+            <!--<link consult="y" id="1">en.wikipedia.org/wiki/Familial_hypocalciuric_hypercalcemia</link>-->
+        </links>
+    </source>
+</sources>
