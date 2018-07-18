@@ -26,8 +26,17 @@ public class Constants {
     public final static String RESPONSE_INVALID_SOURCES = "Invalid source list";
     public final static String RESPONSE_SEMANTIC_TYPES = "Invalid semantic type list";
 
+    public final static String WIKIPEDIA_SOURCE = "wikipedia";
+    public final static String PUBMED_SOURCE = "pubmed";
+
     @Value("${my.header.param.token.name}")
     public String HEADER_PARAM_TOKEN_NAME;
+
+
+    public static final String DOT_JSON = ".json";
+    public static final String DOT_XML = ".xml";
+
+
 
     /** Ruta del archivo XML source */
     public static final String DISEASES_SPARQL_QUERY_FILE = "/sparql/getDiseases.sparql";//"sparql/getDiseases.sparql";
@@ -36,6 +45,37 @@ public class Constants {
 
     public static final String SEMANTIC_TYPES[] = { "IDC-9", "IDC-10", "DiseasesDB", "MeSH", "lbpr", "lbtr" };
     public static final String INVALID_CODES[] = { "*", "," , "—", "–", "{}", "-1", "-"};
+
+    /** Ruta del archivo XML de configuracion */
+    public static final String XML_CONFIG_FOLDER = "parameters/";
+    public static final String XML_CONFIG_FILE = "sources";
+
+    /** Constantes para leer XML */
+    public static final String XML_ROOT_TAG = "source";
+    public static final String XML_TAG_SECTIONS = "sections";
+    public static final String XML_TAG_HIGHLIGTS = "highlights";
+    public static final String XML_TAG_LINKS = "links";
+    public static final String XML_TAG_NAME = "name";
+    public static final String XML_TAG_LINK = "link";
+    public static final String XML_ATT_CONSULT = "consult";
+    public static final String XML_ATT_CONSULT_YES = "y";
+    public static final String XML_ATT_CONSULT_NO = "n";
+    public static final String XML_ATT_ID = "id";
+    public static final String XML_ATT_TYPE = "type";
+    public static final String XML_ATT_CLASS = "class";
+    public static final String XML_ATT_NAME = "name";
+    public static final String XML_ATT_DESC = "desc";
+
+
+    /**
+     * XML_HIGHLIGHTS HL Constantes para consultar
+     */
+    public static final String XML_HL_DISEASENAME = "diseasename";
+    public static final String XML_HL_INFOBOX = "infobox";
+    public static final String XML_HL_EXTERNAL_TEXT = "externalresoruce";
+    public static final String XML_HL_PLAIN_LIST = "plainlist";
+    public static final String XML_HL_HORIZONTAL_LIST = "horizontallist";
+    public static final String XML_HL_TEXT_ALIGN_CENTER = "textaligncenter";
 
 
 }

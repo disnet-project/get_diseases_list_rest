@@ -27,6 +27,8 @@ public interface AlbumDiseaseService {
 
     int insertNative(String albumId, Date version, String diseaseId);
 
+    int insertIgnoreNative(String albumId, Date version, String diseaseId);
+
     void delete(AlbumDisease albumDisease);
 
     AlbumDisease update(AlbumDisease albumDisease);

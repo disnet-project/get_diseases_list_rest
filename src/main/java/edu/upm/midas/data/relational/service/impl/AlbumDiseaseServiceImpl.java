@@ -81,6 +81,12 @@ public class AlbumDiseaseServiceImpl implements AlbumDiseaseService {
 
     @Transactional(propagation= Propagation.REQUIRED)
     @Override
+    public int insertIgnoreNative(String albumId, Date version, String diseaseId) {
+        return daoAlbumDisease.insertIgnoreNative(albumId, version, diseaseId);
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED)
+    @Override
     public void delete(AlbumDisease albumDisease) {
         daoAlbumDisease.delete(albumDisease);
     }

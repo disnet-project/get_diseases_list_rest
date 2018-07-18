@@ -47,8 +47,20 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "SafeDisease.insertNative",
-                query = "INSERT INTO safe_disease (disease_id, name) "
+                query = "INSERT IGNORE INTO safe_disease (disease_id, name) "
                         + "VALUES (:diseaseId, :name)"
+        ),
+
+        //Obtiene todas las enfermedades de la safe list segun la fuente
+        @NamedNativeQuery(
+                name = "SafeDisease.findAllDiseasesBySource",
+                query = "-- consultar la \"disease safe list\"\n" +
+                        "SELECT d.name 'diseaseName', u.url, d.disease_id  " +
+                        "FROM safe_disease d " +
+                        "INNER JOIN safe_disease_url du ON du.disease_id = d.disease_id  " +
+                        "INNER JOIN source s ON s.source_id = du.source_id  " +
+                        "INNER JOIN safe_url u ON u.url_id = du.url_id  " +
+                        "WHERE s.name = :source "
         )
 })
 

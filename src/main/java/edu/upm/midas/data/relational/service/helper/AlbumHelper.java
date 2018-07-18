@@ -83,6 +83,11 @@ public class AlbumHelper {
     }
 
 
+    public int insertIgnoreDiseases(Album album, String diseaseId){
+        return albumDiseaseService.insertIgnoreNative(album.getAlbumId(), album.getDate(), diseaseId);
+    }
+
+
     public void update(Album album){
         albumService.updateNumberDiseasesByIdNative(album.getAlbumId(), album.getDate());
     }
@@ -90,7 +95,10 @@ public class AlbumHelper {
     public List<Disease> findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(List<ApiResponseError> apiResponseErrors, String albumId, Date version, String source){
         List<Disease> diseases = new ArrayList<>();
         try {
+            //Se sustituye para que cuando obtenga la lista de artículos. La obtiene tanto del album actual
+            //como de la safe disease list
             diseases = albumService.findLinksByIdAndSourceNameNative(albumId, version, source);
+            //diseases = albumService.getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(albumId, version, source);
             if (diseases.size() > 0) {
                 for (Disease disease : diseases) {
                     String r = commonService.replaceSpecialCharactersToUnicode(disease.getUrl());

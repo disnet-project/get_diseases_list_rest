@@ -28,6 +28,8 @@ public interface AlbumService {
 
     edu.upm.midas.model.response.Album findByLastVersionNative();
 
+    edu.upm.midas.model.response.Album findFirstVersionNative();
+
     List<Album> findByVersionGraterThanNative(Date version);
 
     List<Album> findByVersionSmallerThanNative(Date version);
@@ -41,6 +43,10 @@ public interface AlbumService {
     List<Object[]> findLinksOnWikipediaById(String albumId, Date version);
     //Importante!
     List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source);
+    //Importante!
+    List<Disease> findSafeDiseaseListNative(String source);
+    //Importante! usando la safe disease list (la primer version 2018-02-01)
+    List<Disease> getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(String albumId, Date version, String source);
 
     int maxSizeNative();
 

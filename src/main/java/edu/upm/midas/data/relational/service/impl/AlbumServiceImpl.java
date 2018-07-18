@@ -77,6 +77,19 @@ public class AlbumServiceImpl implements AlbumService {
         return album;
     }
 
+    @Override
+    public edu.upm.midas.model.response.Album findFirstVersionNative() {
+        edu.upm.midas.model.response.Album album = null;
+        Object[] oQuery = daoAlbum.findFirstVersionNative();
+        if (oQuery != null){
+            album = new edu.upm.midas.model.response.Album();
+            album.setAlbumId( (String) oQuery[0] );
+            album.setDate( (java.sql.Date) oQuery[1] );
+            album.setNumberDiseases( (Integer) oQuery[2] );
+        }
+        return album;
+    }
+
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
     public List<Album> findByVersionGraterThanNative(Date version) {
@@ -127,12 +140,58 @@ public class AlbumServiceImpl implements AlbumService {
                 disease.setSourceId((String) dis[4]);
                 disease.setSourceName((String) dis[5]);
                 disease.setUrl((String) dis[6]);
+                disease.setUrlId((String) dis[7]);
                 //System.out.println(disease.getName() + " - " + disease.getUrl());
                 diseaseList.add(disease);
             }
         }
         return diseaseList;
     }
+
+    @Override
+    public List<Disease> findSafeDiseaseListNative(String source) {
+        List<Disease> diseaseList = new ArrayList<>();
+        //System.out.println(albumId +"|"+ version+"|"+source);
+        List<Object[]> oQueryList = daoAlbum.findSafeDiseaseListNative(source);
+        if (oQueryList != null) {
+            for (Object[] dis : oQueryList) {
+                Disease disease = new Disease();
+                //disease.setAlbumId((String) dis[0]);
+                //disease.setVersion((Date) dis[1]);
+                disease.setDiseaseId((String) dis[0]);
+                disease.setName((String) dis[1]);
+                disease.setSourceId((String) dis[2]);
+                disease.setSourceName((String) dis[3]);
+                disease.setUrl((String) dis[5]);
+                //System.out.println(disease.getName() + " - " + disease.getUrl());
+                diseaseList.add(disease);
+            }
+        }
+        return diseaseList;
+    }
+
+    @Override
+    public List<Disease> getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(String albumId, Date version, String source) {
+        List<Disease> diseaseList = new ArrayList<>();
+        //System.out.println(albumId +"|"+ version+"|"+source);
+        List<Object[]> oQueryList = daoAlbum.getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(albumId, version, source);
+        if (oQueryList != null) {
+            for (Object[] dis : oQueryList) {
+                Disease disease = new Disease();
+                disease.setAlbumId(albumId);
+                disease.setVersion(version);
+                //disease.setDiseaseId((String) dis[2]);
+                disease.setName((String) dis[0]);
+                //disease.setSourceId((String) dis[4]);
+                disease.setSourceName(source);
+                disease.setUrl((String) dis[1]);
+                //System.out.println(disease.getName() + " - " + disease.getUrl());
+                diseaseList.add(disease);
+            }
+        }
+        return diseaseList;
+    }
+
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override

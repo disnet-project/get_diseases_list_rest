@@ -38,7 +38,7 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "SafeDiseaseUrl.insertNative",
-                query = "INSERT INTO safe_disease_url (disease_id, url_id, source_id) "
+                query = "INSERT IGNORE INTO safe_disease_url (disease_id, url_id, source_id) "
                         + "VALUES (:diseaseId, :urlId, :sourceId)"
         )
 })

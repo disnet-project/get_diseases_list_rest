@@ -4,7 +4,11 @@ import com.google.gson.GsonBuilder;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
-import edu.upm.midas.data.relational.entities.addb.Album;
+import edu.upm.midas.data.relational.entities.addb.*;
+import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.data.relational.service.SafeDiseaseService;
+import edu.upm.midas.data.relational.service.SafeDiseaseUrlService;
+import edu.upm.midas.data.relational.service.SafeUrlService;
 import edu.upm.midas.data.relational.service.helper.AlbumHelper;
 import edu.upm.midas.data.relational.service.helper.DiseaseHelper;
 import edu.upm.midas.model.extract.Code;
@@ -35,7 +39,15 @@ public class Populate {
     @Autowired
     private DiseaseHelper diseaseHelper;
     @Autowired
+    private SafeDiseaseService safeDiseaseService;
+    @Autowired
+    private SafeUrlService safeUrlService;
+    @Autowired
+    private SafeDiseaseUrlService safeDiseaseUrlService;
+    @Autowired
     private AlbumHelper albumHelper;
+    @Autowired
+    private AlbumService albumService;
     @Autowired
     private TimeProvider timeProviderService;
     @Value("${my.service.extraction_history.dot_termination}")
@@ -48,8 +60,9 @@ public class Populate {
      * @throws Exception
      */
     @Transactional
-    public void populate() throws Exception{
+    public Album populate() throws Exception{
 
+        Album album = null;
         Map<Code, Disease> diseases = getDiseaseAlbumService.getDiseasesListFromDBPedia();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         List<Disease> diseaseList = new ArrayList<>();
@@ -59,7 +72,7 @@ public class Populate {
             System.out.println("Populate start...");
             Set<Map.Entry<Code, Disease>> allDS = diseases.entrySet();
             Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
-            Album album = albumHelper.insertIfExist(allDS.size());
+            album = albumHelper.insertIfExist(allDS.size());
             if (album != null) {
                 int v = 0;
                 while (it.hasNext()) {
@@ -106,9 +119,40 @@ public class Populate {
 //                System.out.println("ERR.album empty!");
 //            }
 
-
+        return album;
 
     }
+
+
+    @Transactional
+    public void updateDiseaseSafeList(String sourceName, Album album) throws Exception{
+        List<edu.upm.midas.model.response.Disease> albumDiseases = albumService.findLinksByIdAndSourceNameNative(album.getAlbumId(), album.getDate(), sourceName);
+        for (edu.upm.midas.model.response.Disease disease: albumDiseases) {
+            safeDiseaseService.insertNative(disease.getDiseaseId(), disease.getName());
+            safeUrlService.insertNative(disease.getUrlId(), disease.getUrl());
+            safeDiseaseUrlService.insertNative(disease.getDiseaseId(), disease.getUrlId(), disease.getSourceId());
+            System.out.println("Disease inserted or updated: " + disease.getDiseaseId() +" | " + disease.getName());
+        }
+    }
+
+
+    @Transactional
+    public void populateAlbumWithDiseaseSafeList(String sourceName, Album album) throws Exception{
+
+        List<edu.upm.midas.model.response.Disease> diseaseSafeList = safeDiseaseService.findAllDiseasesBySourceName(sourceName);
+
+        for (edu.upm.midas.model.response.Disease disease: diseaseSafeList) {
+            //safeDiseaseService.
+            if (albumHelper.insertIgnoreDiseases(album, disease.getDiseaseId()) > 0)
+                System.out.println("Inserted " + disease.getDiseaseId() + " | " + disease.getUrl());
+            else
+                System.out.println("Ignore " + disease.getDiseaseId() + " | " + disease.getUrl());
+        }
+        albumHelper.update(album);
+
+    }
+
+
 
 
     /**

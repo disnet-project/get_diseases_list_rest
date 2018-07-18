@@ -27,6 +27,8 @@ public interface AlbumDiseaseRepository {
 
     int insertNative(String albumId, Date version, String diseaseId);
 
+    int insertIgnoreNative(String albumId, Date version, String diseaseId);
+
     boolean deleteById(AlbumDiseasePK albumDiseasePK);
 
     void delete(AlbumDisease albumDisease);

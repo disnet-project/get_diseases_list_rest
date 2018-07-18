@@ -57,6 +57,14 @@ import java.util.Objects;
 
         ),
         @NamedNativeQuery(
+                name = "Album.findFirstVersionNative",
+                query = "SELECT a.album_id, a.date, a.number_diseases " +
+                        "FROM album a WHERE a.date = ( " +
+                        "SELECT MIN(b.date) " +
+                        "FROM album b ) "
+
+        ),
+        @NamedNativeQuery(
                 name = "Album.findByVersionGraterThanNative",
                 query = "SELECT a.album_id, a.date, a.number_diseases "
                         + "FROM album a WHERE a.date > :version"
@@ -122,7 +130,7 @@ import java.util.Objects;
 
         ),@NamedNativeQuery(
         name = "Album.findLinksByIdAndSourceNameNative",
-        query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url " +
+        query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url, u.url_id " +
                 "FROM album a " +
                 "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
                 "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
@@ -132,6 +140,62 @@ import java.util.Objects;
                 "WHERE a.album_id = :albumId " +
                 "AND a.date = :version " +
                 "AND s.name = :sourceName "
+
+        ),@NamedNativeQuery(
+        name = "Album.findSafeDiseaseListNative",
+        query = "SELECT d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url_id, u.url  " +
+                "FROM safe_disease d " +
+                "INNER JOIN safe_disease_url du ON du.disease_id = d.disease_id  " +
+                "INNER JOIN source s ON s.source_id = du.source_id  " +
+                "INNER JOIN safe_url u ON u.url_id = du.url_id  " +
+                "WHERE s.name = :sourceName "
+
+        ),@NamedNativeQuery(
+        name = "Album.getSafeDiseasesNotInAAlbum",
+        query = "-- consultar la \"disease safe list\"\n" +
+                "SELECT d.disease_id, d.name 'diseaseName', getDiseaseId(d.name) 'dis_id', u.url  " +
+                "FROM safe_disease d " +
+                "INNER JOIN safe_disease_url du ON du.disease_id = d.disease_id  " +
+                "INNER JOIN source s ON s.source_id = du.source_id  " +
+                "INNER JOIN safe_url u ON u.url_id = du.url_id  " +
+                "WHERE s.name = :sourceName " +
+                "AND d.name NOT IN ( " +
+                "-- union de dos listas para obtener una lista estandar\n" +
+                "SELECT d.name  " +
+                "FROM album a  " +
+                "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date  " +
+                "INNER JOIN disease d ON d.disease_id = ad.disease_id  " +
+                "INNER JOIN disease_url du ON du.disease_id = d.disease_id  " +
+                "INNER JOIN source s ON s.source_id = du.source_id  " +
+                "INNER JOIN url u ON u.url_id = du.url_id  " +
+                "WHERE a.album_id = :albumId " +
+                "AND a.date = :version " +
+                "AND s.name = :sourceName " +
+                "AND d.name IS NOT NULL " +
+                ") "
+
+        ),@NamedNativeQuery(
+        name = "Album.getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative",
+        query = "-- union de dos listas para obtener una lista estandar\n" +
+                "SELECT d.name 'diseaseName', u.url  " +
+                "FROM album a  " +
+                "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date  " +
+                "INNER JOIN disease d ON d.disease_id = ad.disease_id  " +
+                "INNER JOIN disease_url du ON du.disease_id = d.disease_id  " +
+                "INNER JOIN source s ON s.source_id = du.source_id  " +
+                "INNER JOIN url u ON u.url_id = du.url_id  " +
+                "WHERE a.album_id = :albumId  " +
+                "AND a.date = :version  " +
+                "AND s.name = :sourceName " +
+                "-- ;\n" +
+                "UNION \n" +
+                "-- consultar la \"disease safe list\"\n" +
+                "SELECT d.name 'diseaseName', u.url  \n" +
+                "FROM safe_disease d \n" +
+                "INNER JOIN safe_disease_url du ON du.disease_id = d.disease_id  \n" +
+                "INNER JOIN source s ON s.source_id = du.source_id  \n" +
+                "INNER JOIN safe_url u ON u.url_id = du.url_id  \n" +
+                "WHERE s.name = :sourceName "
 
         ),
         //Retornar enlaces que no tengan códigos válidos 5032

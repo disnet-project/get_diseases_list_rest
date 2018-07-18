@@ -64,4 +64,13 @@ public class TimeProvider {
         return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSS").format(date);
     }
 
+    public java.util.Date stringToDate(String date) throws ParseException {
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+    }
+
+    public java.sql.Date convertSQLDateToUtilDate(java.util.Date date){
+        java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
+        return sqlStartDate;
+    }
+
 }

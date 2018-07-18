@@ -69,6 +69,16 @@ public class AlbumDiseaseRepositoryImpl extends AbstractDao<AlbumDiseasePK, Albu
     }
 
     @Override
+    public int insertIgnoreNative(String albumId, Date version, String diseaseId) {
+        return getEntityManager()
+                .createNamedQuery("AlbumDisease.insertIgnoreNative")
+                .setParameter("albumId", albumId)
+                .setParameter("version", version)
+                .setParameter("diseaseId", diseaseId)
+                .executeUpdate();
+    }
+
+    @Override
     public boolean deleteById(AlbumDiseasePK albumDiseasePK) {
         AlbumDisease albumDisease = findById( albumDiseasePK );
         if(albumDisease ==null)

@@ -28,6 +28,8 @@ public class DiseaseHelper {
     @Autowired
     private DiseaseService diseaseService;
     @Autowired
+    private SafeDiseaseService safeDiseaseService;
+    @Autowired
     private UrlService urlService;
     @Autowired
     private SourceService sourceService;
@@ -51,6 +53,30 @@ public class DiseaseHelper {
 
 
     public String insertIfExist(edu.upm.midas.model.extract.Disease dis){
+        Disease disease = diseaseService.findByNameNative( dis.getName() );
+        if (disease != null) {
+            System.out.println("    Found");
+            insertUrls(dis, disease.getDiseaseId());
+            insertCodes(dis, disease.getDiseaseId());
+            return disease.getDiseaseId();
+        }else {
+            System.out.println("    Not Found");
+
+            //Inicia inserción de la enfermedad
+            String lastDiseaseId = getDiseaseId();
+            //System.out.println("LastId: "+ lastDiseaseId);
+            diseaseService.insertNative(lastDiseaseId, dis.getName());
+            //Se insertan urls de la enfermedad
+            insertUrls(dis, lastDiseaseId);
+            insertCodes(dis, lastDiseaseId);
+            return lastDiseaseId;
+        }
+    }
+
+
+    public String insertSafeDiseaseIfExist(edu.upm.midas.model.response.Disease disResp, String source){
+        edu.upm.midas.model.extract.Disease dis = new edu.upm.midas.model.extract.Disease(disResp.getUrl());
+        dis.setName(disResp.getName());
         Disease disease = diseaseService.findByNameNative( dis.getName() );
         if (disease != null) {
             System.out.println("    Found");

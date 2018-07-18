@@ -27,6 +27,8 @@ public interface AlbumRepository {
 
     Object[] findByLastVersionNative();
 
+    Object[] findFirstVersionNative();
+
     List<Album> findByVersionGraterThanNative(Date version);
 
     List<Album> findByVersionSmallerThanNative(Date version);
@@ -40,6 +42,10 @@ public interface AlbumRepository {
     List<Object[]> findLinksOnWikipediaById(String albumId, Date version);
     //Importante!
     List<Object[]> findLinksByIdAndSourceNameNative(String albumId, Date version, String source);
+    //Importante!
+    List<Object[]> findSafeDiseaseListNative(String sourceName);
+    //Importante! usando la safe disease list (la primer version 2018-02-01)
+    List<Object[]> getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(String albumId, Date version, String source);
 
     int maxSizeNative();
 

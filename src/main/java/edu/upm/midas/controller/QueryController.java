@@ -61,6 +61,7 @@ public class QueryController {
                 String end = timeProvider.getTimestampFormat();
                 if (diseases.size() > 0){
                     response.setDiseases(diseases);
+                    response.setUseDiseaseSafeList(true);//Siempre será true desde el 2018-04-02
                     response.setResponseCode(HttpStatus.OK.toString());
                     response.setResponseMessage(HttpStatus.OK.getReasonPhrase());
                     common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
@@ -77,6 +78,7 @@ public class QueryController {
             response.setResponseCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString());
             response.setResponseMessage(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.getReasonPhrase());
         }
+        response.setDiseaseCount(diseases.size());
         response.setErrorsFound(errorsFound);
 
         return response;
@@ -110,6 +112,7 @@ public class QueryController {
                 String end = timeProvider.getTimestampFormat();
                 if (diseases.size() > 0){
                     response.setDiseases(diseases);
+                    response.setUseDiseaseSafeList(true);//Siempre será true desde el 2018-04-02
                     response.setResponseCode(HttpStatus.OK.toString());
                     response.setResponseMessage(HttpStatus.OK.getReasonPhrase());
                     common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
@@ -126,6 +129,7 @@ public class QueryController {
             response.setResponseCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString());
             response.setResponseMessage(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.getReasonPhrase());
         }
+        response.setDiseaseCount(diseases.size());
         response.setErrorsFound(errorsFound);
         return response;
         //return "Successful extraction and insertion in a DB!";

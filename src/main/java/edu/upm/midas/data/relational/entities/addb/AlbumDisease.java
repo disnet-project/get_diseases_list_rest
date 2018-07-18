@@ -66,6 +66,11 @@ import java.util.Objects;
                 name = "AlbumDisease.insertNative",
                 query = "INSERT INTO album_disease (album_id, date, disease_id) " +
                         "VALUES (:albumId, :version, :diseaseId)"
+        ),
+        @NamedNativeQuery(
+                name = "AlbumDisease.insertIgnoreNative",
+                query = "INSERT IGNORE INTO album_disease (album_id, date, disease_id) " +
+                        "VALUES (:albumId, :version, :diseaseId)"
         )
 })
 

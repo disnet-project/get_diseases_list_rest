@@ -79,6 +79,18 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
+    public Object[] findFirstVersionNative() {
+        Object[] album = null;
+        List<Object[]> albumList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Album.findFirstVersionNative")
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(albumList))
+            album = albumList.get(0);
+        return album;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public List<Album> findByVersionGraterThanNative(Date version) {
         List<Album> albums = null;
         List<Album> albumList = (List<Album>) getEntityManager()
@@ -172,6 +184,37 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
             diseases = diseaseList;
         return diseases;
     }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object[]> findSafeDiseaseListNative(String sourceName) {
+        List<Object[]> diseases = null;
+        List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Album.findSafeDiseaseListNative")
+                .setParameter("sourceName", sourceName)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(diseaseList))
+            diseases = diseaseList;
+        return diseases;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object[]> getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative(String albumId, Date version, String source) {
+        List<Object[]> diseases = null;
+        List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Album.getMergeSafeDiseaseListAndCurrentDiseaseListByAlbumIdAndVersionAndSourceNameNative")
+                .setParameter("albumId", albumId)
+                .setParameter("version", version)
+                .setParameter("sourceName", source)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(diseaseList))
+            diseases = diseaseList;
+        return diseases;
+    }
+
 
     @SuppressWarnings("unchecked")
     @Override
