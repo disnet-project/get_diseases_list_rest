@@ -38,11 +38,11 @@ public class QueryController {
             method = RequestMethod.GET)
     public ResponseGDLL getDiseaseLinkListGET(@RequestParam(value = "source") String source,
                                               @RequestParam(value = "album") String albumId,
-                                              @RequestParam(value = "version") String version,
+                                              @RequestParam(value = "snapshot") String snapshot,
                                               @RequestParam(value = "token", required = false) String token,
                                               HttpServletRequest httpRequest,
                                               Device device) throws Exception {
-        Date dataVersion = timeProvider.getSdf().parse(version);
+        Date dataVersion = timeProvider.getSdf().parse(snapshot);
         ResponseFather responseFather = tokenAuthorization.validateService(token, httpRequest.getQueryString(), httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         List<ApiResponseError> errorsFound = new ArrayList<>();
@@ -93,7 +93,7 @@ public class QueryController {
                                                Device device) throws Exception {
         Gson gson = new Gson();
         String requestJSON = gson.toJson(requestGDLL);
-        Date dataVersion = timeProvider.getSdf().parse(requestGDLL.getVersion());//httpRequest.getQueryString() = request
+        Date dataVersion = timeProvider.getSdf().parse(requestGDLL.getSnapshot());//httpRequest.getQueryString() = request
         ResponseFather responseFather = tokenAuthorization.validateService(requestGDLL.getToken(), requestJSON, httpRequest.getMethod(), httpRequest.getRequestURL().toString(), device);
         ResponseGDLL response = new ResponseGDLL();
         List<ApiResponseError> errorsFound = new ArrayList<>();

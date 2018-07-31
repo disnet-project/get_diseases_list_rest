@@ -59,6 +59,24 @@ public class AlbumServiceImpl implements AlbumService {
         return daoAlbum.findByVersionNative(version);
     }
 
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+//    @Override
+    public edu.upm.midas.model.response.Album findByVersionNative_(Date version) {
+        edu.upm.midas.model.response.Album albumResponse = null;
+        Album album = daoAlbum.findByVersionNative(version);
+        if (album!=null){
+            albumResponse.setAlbumId( album.getAlbumId() );
+            albumResponse.setDate( album.getDate() );
+            albumResponse.setNumberDiseases( album.getNumberDiseases() );
+        }
+        return albumResponse;
+    }
+
+    @Override
+    public edu.upm.midas.model.response.Album findByVersionAndSourceNative(Date version, String sourceName) {
+        return createAlbum(daoAlbum.findByVersionAndSourceNative(version, sourceName));
+    }
+
     @Override
     public Date findLastVersionNative() {
         return daoAlbum.findLastVersionNative();
@@ -66,8 +84,11 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Override
     public edu.upm.midas.model.response.Album findByLastVersionNative() {
+        return createAlbum(daoAlbum.findByLastVersionNative());
+    }
+
+    public edu.upm.midas.model.response.Album createAlbum(Object[] oQuery){
         edu.upm.midas.model.response.Album album = null;
-        Object[] oQuery = daoAlbum.findByLastVersionNative();
         if (oQuery != null){
             album = new edu.upm.midas.model.response.Album();
             album.setAlbumId( (String) oQuery[0] );
@@ -134,7 +155,7 @@ public class AlbumServiceImpl implements AlbumService {
             for (Object[] dis : oQueryList) {
                 Disease disease = new Disease();
                 disease.setAlbumId((String) dis[0]);
-                disease.setVersion((Date) dis[1]);
+                disease.setSnapshot((Date) dis[1]);
                 disease.setDiseaseId((String) dis[2]);
                 disease.setName((String) dis[3]);
                 disease.setSourceId((String) dis[4]);
@@ -157,7 +178,7 @@ public class AlbumServiceImpl implements AlbumService {
             for (Object[] dis : oQueryList) {
                 Disease disease = new Disease();
                 //disease.setAlbumId((String) dis[0]);
-                //disease.setVersion((Date) dis[1]);
+                //disease.setSnapshot((Date) dis[1]);
                 disease.setDiseaseId((String) dis[0]);
                 disease.setName((String) dis[1]);
                 disease.setSourceId((String) dis[2]);
@@ -179,7 +200,7 @@ public class AlbumServiceImpl implements AlbumService {
             for (Object[] dis : oQueryList) {
                 Disease disease = new Disease();
                 disease.setAlbumId(albumId);
-                disease.setVersion(version);
+                disease.setSnapshot(version);
                 //disease.setDiseaseId((String) dis[2]);
                 disease.setName((String) dis[0]);
                 //disease.setSourceId((String) dis[4]);

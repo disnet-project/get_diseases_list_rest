@@ -58,6 +58,20 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
+    public Object[] findByVersionAndSourceNative(Date version, String sourceName) {
+        Object[] album = null;
+        List<Object[]> albumList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Album.findByVersionAndSourceNative")
+                .setParameter("version", version)
+                .setParameter("sourceName", sourceName)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(albumList))
+            album = albumList.get(0);
+        return album;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Date findLastVersionNative() {
         return (Date) getEntityManager()
                 .createNamedQuery("Album.findLastVersionNative")

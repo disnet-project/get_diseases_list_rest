@@ -24,6 +24,10 @@ public interface AlbumService {
 
     Album findByVersionNative(Date version);
 
+    edu.upm.midas.model.response.Album findByVersionNative_(Date version);
+
+    edu.upm.midas.model.response.Album findByVersionAndSourceNative(Date version, String sourceName);
+
     Date findLastVersionNative();
 
     edu.upm.midas.model.response.Album findByLastVersionNative();

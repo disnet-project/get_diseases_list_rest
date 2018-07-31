@@ -43,6 +43,18 @@ import java.util.Objects;
 
         ),
         @NamedNativeQuery(
+                name = "Album.findByVersionAndSourceNative",
+                query = "SELECT DISTINCT a.album_id, a.date, a.number_diseases " +
+                        "FROM album a " +
+                        "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date  " +
+                        "INNER JOIN disease d ON d.disease_id = ad.disease_id  " +
+                        "INNER JOIN disease_url du ON du.disease_id = d.disease_id  " +
+                        "INNER JOIN source s ON s.source_id = du.source_id " +
+                        "WHERE a.date = :version " +
+                        "AND s.name = :sourceName "
+
+        ),
+        @NamedNativeQuery(
                 name = "Album.findLastVersionNative",
                 query = "SELECT MAX(a.date) "
                         + "FROM album a "

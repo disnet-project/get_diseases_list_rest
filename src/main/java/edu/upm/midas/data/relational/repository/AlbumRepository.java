@@ -23,6 +23,8 @@ public interface AlbumRepository {
 
     Album findByVersionNative(Date version);
 
+    Object[] findByVersionAndSourceNative(Date version, String sourceName);
+
     Date findLastVersionNative();
 
     Object[] findByLastVersionNative();
