@@ -80,4 +80,24 @@ public class ExtractionController {
         return "ESCRITO";
     }
 
+    @RequestMapping(path = { "/automatic_extraction" }, //wikipedia extraction
+            method = RequestMethod.GET)
+    public void automaticExtraction() throws Exception {
+        try {
+            Album album = null;
+            System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
+            album = populateService.populate();
+            if (album!=null){
+                System.out.println("Update list with the disease Safe List");
+                populateService.populateAlbumWithDiseaseSafeList(Constants.WIKIPEDIA_SOURCE, album);
+                System.out.println("Update list with the disease Safe List... READY!");
+                System.out.println("Update disease Safe List");
+                populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
+                System.out.println("Update disease Safe List... READY!");
+            }
+        }catch (Exception e){
+            System.out.println("DISLISTERR (15thOfTheMonth): " + e.getMessage());
+        }
+    }
+
 }

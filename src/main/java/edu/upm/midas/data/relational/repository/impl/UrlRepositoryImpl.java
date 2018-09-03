@@ -46,6 +46,7 @@ public class UrlRepositoryImpl extends AbstractDao<String, Url>
         List<Object[]> urlList = (List<Object[]>) getEntityManager()
                 .createNamedQuery("Url.findByUrlNative")
                 .setParameter("url", url)
+                //.setMaxResults(1)
                 .getResultList();
         if (CollectionUtils.isNotEmpty(urlList)) {
             url_ = createUrl(urlList.get(0));
