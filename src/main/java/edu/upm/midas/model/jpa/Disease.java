@@ -1,4 +1,4 @@
-package edu.upm.midas.data.relational.entities.addb;
+package edu.upm.midas.model.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -60,7 +60,9 @@ import java.util.Objects;
                         entityClass = Disease.class,
                         fields = {
                                 @FieldResult(name = "diseaseId", column = "disease_id"),
-                                @FieldResult(name = "name", column = "name")
+                                @FieldResult(name = "name", column = "name"),
+                                @FieldResult(name = "partlyIrrelevant", column = "partly_irrelevant"),
+                                @FieldResult(name = "totallyIrrelevant", column = "totally_irrelevant")
                         }
                 )
         )
@@ -70,6 +72,8 @@ import java.util.Objects;
 public class Disease {
     private String diseaseId;
     private String name;
+    private Byte partlyIrrelevant;
+    private Byte totallyIrrelevant;
     private List<AlbumDisease> albumDiseasesByDiseaseId;
     private List<DiseaseCode> diseaseCodesByDiseaseId;
     private List<DiseaseUrl> diseaseUrlsByDiseaseId;
@@ -94,13 +98,35 @@ public class Disease {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "partly_irrelevant", nullable = true)
+    public Byte getPartlyIrrelevant() {
+        return partlyIrrelevant;
+    }
+
+    public void setPartlyIrrelevant(Byte partlyIrrelevant) {
+        this.partlyIrrelevant = partlyIrrelevant;
+    }
+
+    @Basic
+    @Column(name = "totally_irrelevant", nullable = true)
+    public Byte getTotallyIrrelevant() {
+        return totallyIrrelevant;
+    }
+
+    public void setTotallyIrrelevant(Byte totallyIrrelevant) {
+        this.totallyIrrelevant = totallyIrrelevant;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Disease disease = (Disease) o;
         return Objects.equals(diseaseId, disease.diseaseId) &&
-                Objects.equals(name, disease.name);
+                Objects.equals(name, disease.name)&&
+                Objects.equals(partlyIrrelevant, disease.partlyIrrelevant) &&
+                Objects.equals(totallyIrrelevant, disease.totallyIrrelevant);
     }
 
     @Override

@@ -1,8 +1,8 @@
-package edu.upm.midas.data.relational.service.impl;
-import edu.upm.midas.data.relational.entities.addb.Album;
-import edu.upm.midas.data.relational.entities.addb.AlbumPK;
-import edu.upm.midas.data.relational.repository.AlbumRepository;
-import edu.upm.midas.data.relational.service.AlbumService;
+package edu.upm.midas.service.jpa.impl;
+import edu.upm.midas.model.jpa.Album;
+import edu.upm.midas.model.jpa.AlbumPK;
+import edu.upm.midas.repository.jpa.AlbumRepository;
+import edu.upm.midas.service.jpa.AlbumService;
 import edu.upm.midas.model.response.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -162,6 +162,8 @@ public class AlbumServiceImpl implements AlbumService {
                 disease.setSourceName((String) dis[5]);
                 disease.setUrl((String) dis[6]);
                 disease.setUrlId((String) dis[7]);
+                disease.setPartlyIrrelevant((boolean) dis[8]);
+                disease.setTotallyIrrelevant((boolean) dis[9]);
                 //System.out.println(disease.getName() + " - " + disease.getUrl());
                 diseaseList.add(disease);
             }

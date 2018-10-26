@@ -1,6 +1,5 @@
-package edu.upm.midas.data.relational.entities.addb;
+package edu.upm.midas.model.jpa;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -142,7 +141,7 @@ import java.util.Objects;
 
         ),@NamedNativeQuery(
         name = "Album.findLinksByIdAndSourceNameNative",
-        query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url, u.url_id " +
+        query = "SELECT a.album_id, a.date, d.disease_id, d.name 'diseaseName', s.source_id, s.name, u.url, u.url_id, d.partly_irrelevant, d.totally_irrelevant " +
                 "FROM album a " +
                 "INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date " +
                 "INNER JOIN disease d ON d.disease_id = ad.disease_id " +
@@ -151,7 +150,8 @@ import java.util.Objects;
                 "INNER JOIN url u ON u.url_id = du.url_id " +
                 "WHERE a.album_id = :albumId " +
                 "AND a.date = :version " +
-                "AND s.name = :sourceName "
+                "AND s.name = :sourceName " +
+                "AND u.url like '%explo%' "
 
         ),@NamedNativeQuery(
         name = "Album.findSafeDiseaseListNative",

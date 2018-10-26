@@ -1,10 +1,10 @@
 package edu.upm.midas.controller;
 
 import com.google.gson.Gson;
-import edu.upm.midas.authorization.token.service.TokenAuthorization;
+import edu.upm.midas.client_modules.authorization.token.service.TokenAuthorization;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
-import edu.upm.midas.data.relational.service.helper.AlbumHelper;
+import edu.upm.midas.service.jpa.helper.AlbumHelper;
 import edu.upm.midas.model.request.getDiseaseLinkList.RequestGDLL;
 import edu.upm.midas.model.response.ApiResponseError;
 import edu.upm.midas.model.response.Disease;
