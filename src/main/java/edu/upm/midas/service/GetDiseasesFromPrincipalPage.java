@@ -1,9 +1,9 @@
 package edu.upm.midas.service;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
-import edu.upm.midas.data.extraction.component.ConnectDocument;
-import edu.upm.midas.data.extraction.component.LoadSource;
-import edu.upm.midas.data.extraction.model.Connection_;
+import edu.upm.midas.component.extraction.ConnectDocument;
+import edu.upm.midas.component.extraction.LoadSource;
+import edu.upm.midas.model.extraction.Connection_;
 import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

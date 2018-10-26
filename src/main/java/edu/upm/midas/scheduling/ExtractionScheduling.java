@@ -2,7 +2,7 @@ package edu.upm.midas.scheduling;
 
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
-import edu.upm.midas.data.relational.entities.addb.Album;
+import edu.upm.midas.model.jpa.Album;
 import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;

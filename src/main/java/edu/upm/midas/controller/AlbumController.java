@@ -1,14 +1,12 @@
 package edu.upm.midas.controller;
 
 import com.google.gson.Gson;
-import edu.upm.midas.authorization.token.component.JwtTokenUtil;
-import edu.upm.midas.authorization.token.service.TokenAuthorization;
+import edu.upm.midas.client_modules.authorization.token.service.TokenAuthorization;
 import edu.upm.midas.common.util.Common;
 import edu.upm.midas.common.util.TimeProvider;
-import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.service.jpa.AlbumService;
 import edu.upm.midas.model.request.RequestFather;
 import edu.upm.midas.model.request.getAlbum.RequestAlbum;
-import edu.upm.midas.model.request.getDiseaseLinkList.RequestGDLL;
 import edu.upm.midas.model.response.Album;
 import edu.upm.midas.model.response.ApiResponseError;
 import edu.upm.midas.model.response.ResponseFather;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -103,7 +100,7 @@ public class AlbumController {
      */
     public void authorized(ResponseFather responseFather, ResponseLA response, Album album, boolean one, Date snapshot, String source, List<ApiResponseError> errorsFound) throws Exception {
         if (responseFather.isAuthorized()){//Validar findLinksByIdAndSourceNameNative
-//            try {
+            try {
                 String start = timeProvider.getTimestampFormat();
                 if (one){
                     album = albumService.findByVersionAndSourceNative(snapshot, source);
@@ -120,10 +117,10 @@ public class AlbumController {
                     response.setResponseMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
                     common.saveQueryRuntime(responseFather.getInfoToken(), start, end);
                 }
-//            }catch (Exception e){
-//                response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
-//                response.setResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-//            }
+            }catch (Exception e){
+                response.setResponseCode(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+                response.setResponseMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            }
         }else{
             response.setResponseCode(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.toString());
             response.setResponseMessage(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED.getReasonPhrase());

@@ -1,17 +1,15 @@
 package edu.upm.midas.controller;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
-import edu.upm.midas.data.relational.entities.addb.Album;
-import edu.upm.midas.data.relational.entities.addb.AlbumPK;
-import edu.upm.midas.data.relational.service.AlbumService;
+import edu.upm.midas.model.jpa.Album;
+import edu.upm.midas.model.jpa.AlbumPK;
+import edu.upm.midas.service.jpa.AlbumService;
 import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.sql.Date;
 
 /**
  * Created by gerardo on 30/10/2017.

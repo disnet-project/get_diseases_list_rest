@@ -1,7 +1,5 @@
 package edu.upm.midas.service;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.QuerySolution;
@@ -11,17 +9,14 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 import edu.upm.midas.constants.Constants;
-import edu.upm.midas.model.extract.Code;
-import edu.upm.midas.model.extract.Disease;
+import edu.upm.midas.model.extraction.Code;
+import edu.upm.midas.model.extraction.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Service;
 
 
 import java.io.*;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.Map.Entry;
 

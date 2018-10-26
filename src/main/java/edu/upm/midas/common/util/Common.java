@@ -1,7 +1,7 @@
 package edu.upm.midas.common.util;
 
-import edu.upm.midas.authorization.token.component.JwtTokenUtil;
-import edu.upm.midas.authorization.token.service.TokenAuthorization;
+import edu.upm.midas.client_modules.authorization.token.component.JwtTokenUtil;
+import edu.upm.midas.client_modules.authorization.token.service.TokenAuthorization;
 import edu.upm.midas.constants.Constants;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
