@@ -151,7 +151,7 @@ import java.util.Objects;
                 "WHERE a.album_id = :albumId " +
                 "AND a.date = :version " +
                 "AND s.name = :sourceName " +
-                "AND u.url like '%explo%' "
+                "-- AND u.url like '%explo%' "
 
         ),@NamedNativeQuery(
         name = "Album.findSafeDiseaseListNative",
