@@ -48,8 +48,8 @@ import java.util.Objects;
 
         @NamedNativeQuery(
                 name = "Disease.insertNative",
-                query = "INSERT INTO disease (disease_id, name) "
-                        + "VALUES (:diseaseId, :name)"
+                query = "INSERT INTO disease (disease_id, name, source_id, partly_irrelevant, totally_irrelevant) "
+                        + "VALUES (:diseaseId, :name, :sourceId, 0, 0)"
         )
 })
 
@@ -62,7 +62,8 @@ import java.util.Objects;
                                 @FieldResult(name = "diseaseId", column = "disease_id"),
                                 @FieldResult(name = "name", column = "name"),
                                 @FieldResult(name = "partlyIrrelevant", column = "partly_irrelevant"),
-                                @FieldResult(name = "totallyIrrelevant", column = "totally_irrelevant")
+                                @FieldResult(name = "totallyIrrelevant", column = "totally_irrelevant"),
+                                @FieldResult(name = "sourceId", column = "source_id")
                         }
                 )
         )
@@ -74,6 +75,7 @@ public class Disease {
     private String name;
     private Byte partlyIrrelevant;
     private Byte totallyIrrelevant;
+    private String sourceId;
     private List<AlbumDisease> albumDiseasesByDiseaseId;
     private List<DiseaseCode> diseaseCodesByDiseaseId;
     private List<DiseaseUrl> diseaseUrlsByDiseaseId;
@@ -116,6 +118,16 @@ public class Disease {
 
     public void setTotallyIrrelevant(Byte totallyIrrelevant) {
         this.totallyIrrelevant = totallyIrrelevant;
+    }
+
+    @Basic
+    @Column(name = "source_id", nullable = false, length = 10)
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
     }
 
     @Override

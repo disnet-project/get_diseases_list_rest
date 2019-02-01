@@ -98,11 +98,12 @@ public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
     }
 
     @Override
-    public int insertNative(String diseaseId, String name) {
+    public int insertNative(String diseaseId, String name, String sourceId) {
         return getEntityManager()
                 .createNamedQuery("Disease.insertNative")
                 .setParameter("diseaseId", diseaseId)
                 .setParameter("name", name)
+                .setParameter("sourceId", sourceId)
                 .executeUpdate();
     }
 

@@ -11,32 +11,34 @@ import org.apache.commons.lang.StringUtils;
  * @className StatusHttpEnum
  * @see
  */
-public enum StatusHttpEnum {
+public enum SourceEnum {
 
-    OK("200", "OK"),
-    MULTIPLE_CHICES("300", "Multiple Choices"),
-    MOVED_PERMANENTLY("301", "Moved Permanently"),
-    USE_PROXY("305", "Use Proxy"),
-    BAD_REQUEST("400", "Bad Request"),
-    FORBIDDEN("403", "Forbidden"),
-    NOT_FOUND("404", "Not Found"),
-    INTERNAL_SERVER_ERROR("500", "Internal Server Error"),
-    BAD_GATEWAY("502", "Bad Gateway"),
-    SERV_UNAVAILABLE("503", "Service Unavailable");
+    DBPEDIA("SO02", "dbpedia"),
+    DBPEDIALIVE("SO04", "dbpedialive");
 
     private String key;
     private String description;
 
-    private StatusHttpEnum(String key, String description) {
+    private SourceEnum(String key, String description) {
         this.key = key;
         this.description = description;
     }
 
-    public static StatusHttpEnum getEnum(String clave) {
+    public static SourceEnum getEnumByKey(String clave) {
         if (StringUtils.isNotBlank(clave)) {
-            for (StatusHttpEnum estatus : StatusHttpEnum.values()) {
-                if (clave.equals(estatus.getKey()))
-                    return estatus;
+            for (SourceEnum source : SourceEnum.values()) {
+                if (clave.equals(source.getKey()))
+                    return source;
+            }
+        }
+        return null;
+    }
+
+    public static SourceEnum getEnumByDescription(String description) {
+        if (StringUtils.isNotBlank(description)) {
+            for (SourceEnum source : SourceEnum.values()) {
+                if (description.equals(source.getDescription()))
+                    return source;
             }
         }
         return null;

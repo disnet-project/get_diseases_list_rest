@@ -55,8 +55,8 @@ public class ConnectDocument {
             System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
             connection_ = tryConnect(connection_);
             if (connection_.getoDoc() == null) {
-                connection_.setStatus(StatusHttpEnum.NOT_FOUND.getDescripcion());
-                connection_.setStatusCode(StatusHttpEnum.NOT_FOUND.getClave());
+                connection_.setStatus(StatusHttpEnum.NOT_FOUND.getDescription());
+                connection_.setStatusCode(StatusHttpEnum.NOT_FOUND.getKey());
                 connection_.setoDoc(null);
             }
         }
@@ -79,8 +79,8 @@ public class ConnectDocument {
             connection_.setStatusCode( connection.execute().statusCode()+"" );
         } catch (Exception e) {
             System.out.println("Exception to connect with the page: (" + connection_.getLink() + ") " + e.getMessage() + " " +e.getStackTrace());
-            connection_.setStatus( StatusHttpEnum.NOT_FOUND.getDescripcion() );
-            connection_.setStatusCode( StatusHttpEnum.NOT_FOUND.getClave() );
+            connection_.setStatus( StatusHttpEnum.NOT_FOUND.getDescription() );
+            connection_.setStatusCode( StatusHttpEnum.NOT_FOUND.getKey() );
             connection_.setoDoc(null);
         }
         return connection_;

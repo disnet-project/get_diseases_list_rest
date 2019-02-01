@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
  * @className ExtractionScheduling
  * @see
  */
-@Service
+//@Service
 public class ExtractionScheduling {
 
     @Autowired
@@ -113,7 +113,7 @@ public class ExtractionScheduling {
     public void test() throws Exception {
         try {
             System.out.println("Tarea programada usando expresiones Cron: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
-            getDiseasesFromDBPedia.getDiseasesFromDBPedia();
+            getDiseasesFromDBPedia.getDiseasesFromDBPedia("dbpedia");
         }catch (Exception e){
             System.out.println("getAlbumListERR (15thOfTheMonth): " + e.getMessage());
         }

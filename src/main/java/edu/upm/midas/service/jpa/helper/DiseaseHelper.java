@@ -61,8 +61,8 @@ public class DiseaseHelper {
 
             //Inicia inserción de la enfermedad
             String lastDiseaseId = getDiseaseId();
-            //System.out.println("LastId: "+ lastDiseaseId);
-            diseaseService.insertNative(lastDiseaseId, dis.getName());
+            System.out.println("LastId: "+ lastDiseaseId);
+            diseaseService.insertNative(lastDiseaseId, dis.getName(), dis.getSourceId());
             //Se insertan urls de la enfermedad
             insertUrls(dis, lastDiseaseId);
             insertCodes(dis, lastDiseaseId);
@@ -71,28 +71,28 @@ public class DiseaseHelper {
     }
 
 
-    public String insertSafeDiseaseIfExist(edu.upm.midas.model.response.Disease disResp, String source){
-        edu.upm.midas.model.extraction.Disease dis = new edu.upm.midas.model.extraction.Disease(disResp.getUrl());
-        dis.setName(disResp.getName());
-        Disease disease = diseaseService.findByNameNative( dis.getName() );
-        if (disease != null) {
-            System.out.println("    Found");
-            insertUrls(dis, disease.getDiseaseId());
-            insertCodes(dis, disease.getDiseaseId());
-            return disease.getDiseaseId();
-        }else {
-            System.out.println("    Not Found");
-
-            //Inicia inserción de la enfermedad
-            String lastDiseaseId = getDiseaseId();
-            //System.out.println("LastId: "+ lastDiseaseId);
-            diseaseService.insertNative(lastDiseaseId, dis.getName());
-            //Se insertan urls de la enfermedad
-            insertUrls(dis, lastDiseaseId);
-            insertCodes(dis, lastDiseaseId);
-            return lastDiseaseId;
-        }
-    }
+//    public String insertSafeDiseaseIfExist(edu.upm.midas.model.response.Disease disResp, String source){
+//        edu.upm.midas.model.extraction.Disease dis = new edu.upm.midas.model.extraction.Disease(disResp.getUrl());
+//        dis.setName(disResp.getName());
+//        Disease disease = diseaseService.findByNameNative( dis.getName() );
+//        if (disease != null) {
+//            System.out.println("    Found");
+//            insertUrls(dis, disease.getDiseaseId());
+//            insertCodes(dis, disease.getDiseaseId());
+//            return disease.getDiseaseId();
+//        }else {
+//            System.out.println("    Not Found");
+//
+//            //Inicia inserción de la enfermedad
+//            String lastDiseaseId = getDiseaseId();
+//            //System.out.println("LastId: "+ lastDiseaseId);
+//            diseaseService.insertNative(lastDiseaseId, dis.getName());
+//            //Se insertan urls de la enfermedad
+//            insertUrls(dis, lastDiseaseId);
+//            insertCodes(dis, lastDiseaseId);
+//            return lastDiseaseId;
+//        }
+//    }
 
 
     public void insertUrls(edu.upm.midas.model.extraction.Disease disease, String diseaseId){

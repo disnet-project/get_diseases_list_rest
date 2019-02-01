@@ -81,6 +81,7 @@ import java.util.Objects;
 public class SafeDisease {
     private String diseaseId;
     private String name;
+    private String sourceId;
     private List<SafeDiseaseUrl> safeDiseaseUrlsByDiseaseId;
 
     @Id
@@ -103,13 +104,23 @@ public class SafeDisease {
         this.name = name;
     }
 
+    @Basic
+    @Column(name = "source_id", nullable = false, length = 10)
+    public String getSourceId() {
+        return sourceId;
+    }
+
+    public void setSourceId(String sourceId) {
+        this.sourceId = sourceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SafeDisease that = (SafeDisease) o;
         return Objects.equals(diseaseId, that.diseaseId) &&
-                Objects.equals(name, that.name);
+                Objects.equals(name, that.name) ;
     }
 
     @Override

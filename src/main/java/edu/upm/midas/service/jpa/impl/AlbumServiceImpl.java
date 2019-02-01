@@ -149,10 +149,11 @@ public class AlbumServiceImpl implements AlbumService {
     @Override
     public List<Disease> findLinksByIdAndSourceNameNative(String albumId, Date version, String source) {
         List<Disease> diseaseList = new ArrayList<>();
-        //System.out.println(albumId +"|"+ version+"|"+source);
+//        System.out.println(albumId +"|"+ version+"|"+source);
         List<Object[]> oQueryList = daoAlbum.findLinksByIdAndSourceNameNative(albumId, version, source);
         if (oQueryList != null) {
             for (Object[] dis : oQueryList) {
+//                System.out.println((String) dis[3] + " - " + (String) dis[6]);
                 Disease disease = new Disease();
                 disease.setAlbumId((String) dis[0]);
                 disease.setSnapshot((Date) dis[1]);
@@ -164,7 +165,7 @@ public class AlbumServiceImpl implements AlbumService {
                 disease.setUrlId((String) dis[7]);
                 disease.setPartlyIrrelevant((boolean) dis[8]);
                 disease.setTotallyIrrelevant((boolean) dis[9]);
-                //System.out.println(disease.getName() + " - " + disease.getUrl());
+//                System.out.println(disease.getName() + " - " + disease.getUrl());
                 diseaseList.add(disease);
             }
         }

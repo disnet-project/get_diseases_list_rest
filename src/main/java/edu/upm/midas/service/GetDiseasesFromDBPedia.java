@@ -9,6 +9,7 @@ import com.hp.hpl.jena.rdf.model.RDFNode;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.sparql.engine.http.QueryEngineHTTP;
 import edu.upm.midas.constants.Constants;
+import edu.upm.midas.enums.SourceEnum;
 import edu.upm.midas.model.extraction.Code;
 import edu.upm.midas.model.extraction.Disease;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,15 @@ public class GetDiseasesFromDBPedia {
 
 	private final String DISEASES_SPARQL_QUERY_FILE = Constants.DISEASES_SPARQL_QUERY_FILE;
 	private final String DBPEDIA_SPARQL_ENDPOINT = Constants.DBPEDIA_SPARQL_ENDPOINT;
+	private final String DBPEDIALIVE_SPARQL_ENDPOINT = Constants.DBPEDIALIVE_SPARQL_ENDPOINT;
 
 
-	public void getDiseasesFromDBPedia() {
-		init();
+	public void getDiseasesFromDBPedia(String source) {
+		init(source);
 	}
 
 
-	public Map<Code, Disease> getDiseasesListFromDBPedia() {
+	public Map<Code, Disease> getDiseasesListFromDBPedia(String source) {
 		Map<Code, Disease> diseases = null;
 		try {
 			/* El m�todo getListDiseasesDBPedia() es el encargado de hacer la query SPARQL
@@ -48,7 +50,7 @@ public class GetDiseasesFromDBPedia {
 			 *
 			 * Se puede consultar los objetos para ver sus datos.
 			*/
-			diseases = getListDiseasesDBPedia();
+			diseases = getListDiseasesDBPedia(source);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,7 +58,7 @@ public class GetDiseasesFromDBPedia {
 		return diseases;
 	}
 
-	private void init() {
+	private void init(String source) {
 		try {
 			/* El m�todo getListDiseasesDBPedia() es el encargado de hacer la query SPARQL
 			 * que se encuentra en el fichero "sparql/getDiseases.sparql" y obtener todos los art�culos
@@ -68,17 +70,19 @@ public class GetDiseasesFromDBPedia {
 			 * 
 			 * Se puede consultar los objetos para ver sus datos.
 			*/
-			Map<Code, Disease> diseases = getListDiseasesDBPedia();
+			Map<Code, Disease> diseases = getListDiseasesDBPedia(source);
 			Set<Entry<Code, Disease>> allDS = diseases.entrySet();
 			Iterator<Entry<Code, Disease>> it = allDS.iterator();
+			System.out.println("Disease list size: " + diseases.size());
 			int v = 0;
 			while (it.hasNext()) {
 				Entry<Code, Disease> ent = it.next();
 				Disease dis = ent.getValue();
+				Code code = ent.getKey();
 				//System.out.println("Disease:");
 				//System.out.println(dis.toString());
 				//System.out.println();
-
+				v++;
 				System.out.println(v + ".Dis==>|NAME:| " + dis.getName()
 //						+ " |DiseasesDB_CODE:| " +  dis.getDiseasesDBCode()
 //						+ " | eMedicine_CODE: | " + dis.geteMedicineCode()
@@ -87,12 +91,12 @@ public class GetDiseasesFromDBPedia {
 //						+ " | Mesh_CODE: | " + dis.getMeshCode()
 //						+ " | OMIM_CODE: | " + dis.getOMIMCode()
 //						+ " | MedlinePlus_CODE: | " + dis.getMedlinePlusCode()
-						+ " |WIKIPEDIA_PAGE:|" + dis.getWikipediaPage()
+						+ " |WIKIPEDIA_PAGE:|" + dis.getWikipediaPage() + " KEY:" + code.keys.toString()
 //						+ " | DBPEDIA_PAGE: | " + dis.getURI()
 //						+ " | FREEBASE_PAGE | " + dis.getFreebaseURL()
 				);
 
-				v++;
+
 			}
 			System.out.println("Total: " + v);
 		} catch (Exception e) {
@@ -105,27 +109,28 @@ public class GetDiseasesFromDBPedia {
 	/**
 	 * M�todo para obtener el n�mero de subclases de una clase determinada.
 	 * 
-	 * @param uriClass
-	 *            Recibe su URI.
-	 * @param endpoint
-	 *            Recibe el endpoint.
+	 * @param source
 	 * @return Devuelve el n�mero de clases.
 	 * @throws Exception
 	 *             Puede lanzar una excepci�n.
 	 */
 	@SuppressWarnings("resource")
-	private Map<Code, Disease> getListDiseasesDBPedia() throws Exception {
+	private Map<Code, Disease> getListDiseasesDBPedia(String source) throws Exception {
 		Map<Code, Disease> diseases = new HashMap<Code, Disease>();
 		Query query = null;
 		QueryEngineHTTP qexec = null;
 		String finalQuery = loadQuery(DISEASES_SPARQL_QUERY_FILE);
 		query = QueryFactory.create(finalQuery);
-		qexec = new QueryEngineHTTP(DBPEDIA_SPARQL_ENDPOINT, query);
+		if (source.equals(Constants.DBPEDIA_SOURCE)) {
+			qexec = new QueryEngineHTTP(DBPEDIA_SPARQL_ENDPOINT, query);
+		}else{
+			qexec = new QueryEngineHTTP(DBPEDIALIVE_SPARQL_ENDPOINT, query);
+		}
 		ResultSet results = qexec.execSelect();
 		while (results.hasNext()) {
 			QuerySolution qs = results.next();
 			Resource dis = qs.getResource("?d");
-			Disease disease = new Disease(dis.getURI());
+			Disease disease = new Disease(dis.getURI(), SourceEnum.getEnumByDescription(source).getKey());
 			Literal name = qs.getLiteral("?dn");
 			disease.setName(name.getString());
 			Resource wp = qs.getResource("?wikiPage");
@@ -158,6 +163,7 @@ public class GetDiseasesFromDBPedia {
 			Resource frbase = qs.getResource("?frbase");
 			if (frbase != null)
 				disease.setFreebaseURL(frbase.getURI());
+
 			LinkedList<String> codes = new LinkedList<String>();
 			if (icd9 != null) {
 				codes.add(icd9.getString());
@@ -177,6 +183,7 @@ public class GetDiseasesFromDBPedia {
 			if (emed != null) {
 				codes.add(emed.getString());
 			}
+
 			diseases.put(new Code(codes), disease);
 		}
 		return diseases;

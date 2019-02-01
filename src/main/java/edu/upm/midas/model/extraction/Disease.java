@@ -13,9 +13,15 @@ public class Disease {
 	private String OMIMCode;
 	private String eMedicineCode;
 	private String freebaseURL;
+	private String sourceId;
 
 	public Disease(String uri) {
 		this.URI = uri;
+	}
+
+	public Disease(String uri, String sourceId) {
+		this.URI = uri;
+		this.sourceId = sourceId;
 	}
 
 	public void setEMedicineCode(String e) {
@@ -98,6 +104,14 @@ public class Disease {
 
 	public void setFreebaseURL(String fbu) {
 		this.freebaseURL = fbu;
+	}
+
+	public String getSourceId() {
+		return sourceId;
+	}
+
+	public void setSourceId(String sourceId) {
+		this.sourceId = sourceId;
 	}
 
 	public String getDiseaseConcept() {

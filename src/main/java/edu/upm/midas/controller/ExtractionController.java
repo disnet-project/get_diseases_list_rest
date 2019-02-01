@@ -6,10 +6,16 @@ import edu.upm.midas.model.jpa.AlbumPK;
 import edu.upm.midas.service.jpa.AlbumService;
 import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by gerardo on 30/10/2017.
@@ -35,10 +41,11 @@ public class ExtractionController {
 
 
     @RequestMapping(path = { "/retrieve" }, //wikipedia extraction
-            method = RequestMethod.GET)
-    public String extract() throws Exception {
+            method = RequestMethod.GET,
+            params = {"source"})
+    public String extract(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source) throws Exception {
         System.out.println("retrieve");
-        getDiseasesFromDBPedia.getDiseasesFromDBPedia();
+        getDiseasesFromDBPedia.getDiseasesFromDBPedia(source);
         return "Successful extraction and insertion in a DB!";
     }
 
@@ -72,9 +79,10 @@ public class ExtractionController {
     }
 
     @RequestMapping(path = { "/test" }, //wikipedia extraction
-            method = RequestMethod.GET)
-    public String test() throws Exception {
-        populateService.writeJSONFile("hola GLG", "albumId", "myVersionGLG");
+            method = RequestMethod.GET,
+            params = {"source"})
+    public String test(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source) throws Exception {
+        populateService.writeJSONFile("hola GLG", "albumId", "myVersionGLG", source);
         return "ESCRITO";
     }
 

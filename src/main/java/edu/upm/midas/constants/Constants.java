@@ -28,6 +28,8 @@ public class Constants {
 
     public final static String WIKIPEDIA_SOURCE = "wikipedia";
     public final static String PUBMED_SOURCE = "pubmed";
+    public final static String DBPEDIA_SOURCE = "dbpedia";
+    public final static String DBPEDIALIVE_SOURCE = "dbpedialive";
 
     @Value("${my.header.param.token.name}")
     public String HEADER_PARAM_TOKEN_NAME;
@@ -41,6 +43,7 @@ public class Constants {
     /** Ruta del archivo XML source */
     public static final String DISEASES_SPARQL_QUERY_FILE = "/sparql/getDiseases.sparql";//"sparql/getDiseases.sparql";
     public static final String DBPEDIA_SPARQL_ENDPOINT = "http://dbpedia.org/sparql";
+    public static final String DBPEDIALIVE_SPARQL_ENDPOINT = "http://dbpedia-live.openlinksw.com/sparql";
     public static final String EXTRACTION_HISTORY_FOLDER = "tmp/extraction_history/";//"extraction_history/"; //real= /tmp/extraction_history/
 
     public static final String SEMANTIC_TYPES[] = { "IDC-9", "IDC-10", "DiseasesDB", "MeSH", "lbpr", "lbtr" };

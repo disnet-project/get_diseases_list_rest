@@ -63,17 +63,21 @@ public class Populate {
     public Album populate() throws Exception{
 
         Album album = null;
-        Map<Code, Disease> diseases = getDiseaseAlbumService.getDiseasesListFromDBPedia();
+        Map<Code, Disease> dbpediaDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIA_SOURCE);
+        Map<Code, Disease> dbpedialiveDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIALIVE_SOURCE);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         List<Disease> diseaseList = new ArrayList<>();
 
-        if (diseases != null) {
+        if (dbpediaDiseases != null) {
             System.out.println("-------------------- POPULATE DATABASE --------------------");
             System.out.println("Populate start...");
-            Set<Map.Entry<Code, Disease>> allDS = diseases.entrySet();
+            Set<Map.Entry<Code, Disease>> allDS = dbpediaDiseases.entrySet();
             Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
             album = albumHelper.insertIfExist(allDS.size());
             if (album != null) {
+
+                //<editor-fold desc="POPULATE DBPEDIA">
+//                insert(dbpediaDiseases, diseaseList, album, Constants.DBPEDIA_SOURCE);
                 int v = 0;
                 while (it.hasNext()) {
                     Map.Entry<Code, Disease> ent = it.next();
@@ -88,8 +92,30 @@ public class Populate {
                 }
                 albumHelper.update(album);
                 //System.out.println(gson.toJson(diseaseList));
-                writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd());
+                writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), Constants.DBPEDIA_SOURCE);
                 System.out.println("Total: " + v);
+                //</editor-fold>
+                //<editor-fold desc="POPULATE DBPEDIALIVE">
+//                insert(dbpedialiveDiseases, diseaseList, album, Constants.DBPEDIALIVE_SOURCE);
+                allDS = dbpedialiveDiseases.entrySet();
+                it = allDS.iterator();
+                v = 0;
+                while (it.hasNext()) {
+                    Map.Entry<Code, Disease> ent = it.next();
+                    Disease disease = ent.getValue();
+                    Code code = ent.getKey();
+                    diseaseList.add(disease);
+                    //if (disease.getName().equals("Köhler disease")){
+                    System.out.println(v + ". Insert disease (dbpedialive): " + disease.getName() + " - " + disease.getWikipediaPage());
+                    String diseaseId = diseaseHelper.insertIfExist(disease);
+                    albumHelper.insertDiseases(album, diseaseId);
+                    v++;
+                }
+                albumHelper.update(album);
+                //System.out.println(gson.toJson(diseaseList));
+                writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), Constants.DBPEDIALIVE_SOURCE);
+                System.out.println("Total: " + v);
+                //</editor-fold>
                 System.out.println("End polulation.");
             } else {
                 System.out.println("ERR.album empty!");
@@ -97,7 +123,6 @@ public class Populate {
             //Consultar la lista segura, hacer una comparación entre la lista segura y la recien insertada
             // e insertar aquellas enfermedades que no estan cerrar el album
         }
-
 //        if (diseases != null) {
 //            System.out.println("-------------------- POPULATE DATABASE --------------------");
 //            System.out.println("Populate start...");
@@ -118,9 +143,38 @@ public class Populate {
 //            } else {
 //                System.out.println("ERR.album empty!");
 //            }
-
         return album;
+    }
 
+
+    public void insert(Map<Code, Disease> diseaseMap, List<Disease> generalDiseaseList, Album album, String source){
+        List<Disease> diseaseList = new ArrayList<>();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        Set<Map.Entry<Code, Disease>> allDS = diseaseMap.entrySet();
+        Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
+        int v = 0;
+        while (it.hasNext()) {
+            Map.Entry<Code, Disease> ent = it.next();
+            Disease disease = ent.getValue();
+            Code code = ent.getKey();
+            diseaseList.add(disease);
+            generalDiseaseList.add(disease);
+            //if (disease.getName().equals("Köhler disease")){
+            System.out.println(v + ". Insert disease (" + source + "): " + disease.getName() + " - " + disease.getWikipediaPage());
+            String diseaseId = diseaseHelper.insertIfExist(disease);
+            albumHelper.insertDiseases(album, diseaseId);
+            v++;
+        }
+        albumHelper.update(album);
+        //System.out.println(gson.toJson(diseaseList));
+        try {
+            System.out.println("Save JSON album disease list from: " + source);
+            writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), source);
+        }catch (Exception e){
+
+        }
+        System.out.println("Total: " + v);
     }
 
 
@@ -163,8 +217,8 @@ public class Populate {
      * @param version
      * @throws IOException
      */
-    public void writeJSONFile(String diseaseJsonBody, String albumId, String version) throws IOException {
-        String fileName = version + "_" +albumId + TERMINATION;//adis = disease album
+    public void writeJSONFile(String diseaseJsonBody, String albumId, String version, String source) throws IOException {
+        String fileName = version + "_" + source + "_" + albumId + TERMINATION;//adis = disease album
         String path = Constants.EXTRACTION_HISTORY_FOLDER + fileName;
         InputStream in = getClass().getResourceAsStream(path);
         //BufferedReader bL = new BufferedReader(new InputStreamReader(in));
