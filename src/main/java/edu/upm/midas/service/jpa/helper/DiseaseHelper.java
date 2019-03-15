@@ -58,11 +58,10 @@ public class DiseaseHelper {
             return disease.getDiseaseId();
         }else {
             System.out.println("    Not Found");
-
             //Inicia inserción de la enfermedad
             String lastDiseaseId = getDiseaseId();
             System.out.println("LastId: "+ lastDiseaseId);
-            diseaseService.insertNative(lastDiseaseId, dis.getName(), dis.getSourceId());
+            diseaseService.insertNative(lastDiseaseId, dis.getName(), dis.getSourceId(), false, false);
             //Se insertan urls de la enfermedad
             insertUrls(dis, lastDiseaseId);
             insertCodes(dis, lastDiseaseId);

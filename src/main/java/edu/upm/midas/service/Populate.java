@@ -13,6 +13,8 @@ import edu.upm.midas.service.jpa.helper.DiseaseHelper;
 import edu.upm.midas.model.extraction.Code;
 import edu.upm.midas.model.extraction.Disease;
 import edu.upm.midas.model.jpa.Album;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ import java.util.*;
  */
 @Service
 public class Populate {
+
+    private static final Logger logger = LoggerFactory.getLogger(Populate.class);
 
     @Autowired
     private GetDiseasesFromDBPedia getDiseaseAlbumService;
@@ -70,7 +74,7 @@ public class Populate {
 
         if (dbpediaDiseases != null) {
             System.out.println("-------------------- POPULATE DATABASE --------------------");
-            System.out.println("Populate start...");
+            System.out.println("Populate start (regular DBpedia)...");
             Set<Map.Entry<Code, Disease>> allDS = dbpediaDiseases.entrySet();
             Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
             album = albumHelper.insertIfExist(allDS.size());
@@ -78,6 +82,7 @@ public class Populate {
 
                 //<editor-fold desc="POPULATE DBPEDIA">
 //                insert(dbpediaDiseases, diseaseList, album, Constants.DBPEDIA_SOURCE);
+
                 int v = 0;
                 while (it.hasNext()) {
                     Map.Entry<Code, Disease> ent = it.next();
@@ -97,6 +102,7 @@ public class Populate {
                 //</editor-fold>
                 //<editor-fold desc="POPULATE DBPEDIALIVE">
 //                insert(dbpedialiveDiseases, diseaseList, album, Constants.DBPEDIALIVE_SOURCE);
+                System.out.println("Populate start (regular DBpedia-Live)...");
                 allDS = dbpedialiveDiseases.entrySet();
                 it = allDS.iterator();
                 v = 0;

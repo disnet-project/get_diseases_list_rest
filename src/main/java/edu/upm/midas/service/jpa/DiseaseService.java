@@ -27,7 +27,7 @@ public interface DiseaseService {
 
     void save(Disease disease);
 
-    int insertNative(String diseaseId, String name, String sourceId);
+    int insertNative(String diseaseId, String name, String sourceId, boolean partly_irrelevant, boolean totally_irrelevant);
 
     void delete(Disease disease);
 

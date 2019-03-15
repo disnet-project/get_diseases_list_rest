@@ -49,7 +49,7 @@ import java.util.Objects;
         @NamedNativeQuery(
                 name = "Disease.insertNative",
                 query = "INSERT INTO disease (disease_id, name, source_id, partly_irrelevant, totally_irrelevant) "
-                        + "VALUES (:diseaseId, :name, :sourceId, 0, 0)"
+                        + "VALUES (:diseaseId, :name, :sourceId, :partly_irrelevant, :totally_irrelevant)"
         )
 })
 

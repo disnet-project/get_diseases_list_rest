@@ -27,7 +27,7 @@ public interface DiseaseRepository {
 
     void persist(Disease disease);
 
-    int insertNative(String diseaseId, String name, String sourceId);
+    int insertNative(String diseaseId, String name, String sourceId, boolean partly_irrelevant, boolean totally_irrelevant);
 
     boolean deleteById(String diseaseId);
 

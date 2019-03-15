@@ -77,8 +77,8 @@ public class DiseaseServiceImpl implements DiseaseService {
 
     @Transactional(propagation= Propagation.REQUIRED)
     @Override
-    public int insertNative(String diseaseId, String name, String sourceId) {
-        return daoDisease.insertNative(diseaseId, name, sourceId);
+    public int insertNative(String diseaseId, String name, String sourceId, boolean partly_irrelevant, boolean totally_irrelevant) {
+        return daoDisease.insertNative(diseaseId, name, sourceId, partly_irrelevant, totally_irrelevant);
     }
 
     @Transactional(propagation= Propagation.REQUIRED)
