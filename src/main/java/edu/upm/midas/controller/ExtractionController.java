@@ -3,6 +3,7 @@ import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
 import edu.upm.midas.model.jpa.Album;
 import edu.upm.midas.model.jpa.AlbumPK;
+import edu.upm.midas.scheduling.ExtractionScheduling;
 import edu.upm.midas.service.jpa.AlbumService;
 import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
@@ -32,6 +33,8 @@ public class ExtractionController {
 
     @Autowired
     private GetDiseasesFromDBPedia getDiseasesFromDBPedia;
+    @Autowired
+    private ExtractionScheduling extractionScheduling;
     @Autowired
     private Populate populateService;
     @Autowired
@@ -89,21 +92,7 @@ public class ExtractionController {
     @RequestMapping(path = { "/automatic_extraction" }, //wikipedia extraction
             method = RequestMethod.GET)
     public void automaticExtraction() throws Exception {
-        try {
-            Album album = null;
-            System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
-            album = populateService.populate();
-            if (album!=null){
-                System.out.println("Update list with the disease Safe List");
-                populateService.populateAlbumWithDiseaseSafeList(Constants.WIKIPEDIA_SOURCE, album);
-                System.out.println("Update list with the disease Safe List... READY!");
-                System.out.println("Update disease Safe List");
-                populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
-                System.out.println("Update disease Safe List... READY!");
-            }
-        }catch (Exception e){
-            System.out.println("DISLISTERR (15thOfTheMonth): " + e.getMessage());
-        }
+        extractionScheduling.extractionEveryFirstDayOfTheMonth();
     }
 
 }

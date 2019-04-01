@@ -18,13 +18,11 @@ import org.springframework.stereotype.Service;
  * @className ExtractionScheduling
  * @see
  */
-//@Service
+@Service
 public class ExtractionScheduling {
 
     @Autowired
     private Populate populateService;
-    @Autowired
-    private GetDiseasesFromDBPedia getDiseasesFromDBPedia;
     @Autowired
     private TimeProvider timeProvider;
 
@@ -108,12 +106,12 @@ public class ExtractionScheduling {
 
     //TEST
     //@Scheduled(cron = "0 0 10 17 * ?")
-    //@Scheduled(fixedRate = 30000)
+//    @Scheduled(fixedRate = 30000)
     //@Scheduled(cron = "0 15 11 18 * ?" )
     public void test() throws Exception {
         try {
             System.out.println("Tarea programada usando expresiones Cron: 0 0 12 15 * ?" + System.currentTimeMillis() / 1000 + timeProvider.getNowFormatyyyyMMdd());
-            getDiseasesFromDBPedia.getDiseasesFromDBPedia("dbpedia");
+//            getDiseasesFromDBPedia.getDiseasesFromDBPedia("dbpedia");
         }catch (Exception e){
             System.out.println("getAlbumListERR (15thOfTheMonth): " + e.getMessage());
         }
