@@ -1,4 +1,5 @@
 package edu.upm.midas.service.jpa.impl;
+import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.model.jpa.Album;
 import edu.upm.midas.model.jpa.AlbumPK;
 import edu.upm.midas.repository.jpa.AlbumRepository;
@@ -27,6 +28,9 @@ public class AlbumServiceImpl implements AlbumService {
 
     @Autowired
     private AlbumRepository daoAlbum;
+
+    @Autowired
+    private TimeProvider timeProvider;
 
     @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
     @Override
@@ -81,6 +85,17 @@ public class AlbumServiceImpl implements AlbumService {
     public Date findLastVersionNative() {
         return daoAlbum.findLastVersionNative();
     }
+
+    @Override
+    public Date getPenultimateDiseaseAlbumDateNative(boolean currentDate, java.sql.Date specificDate){
+        return daoAlbum.getPenultimateDiseaseAlbumDateNative(currentDate, specificDate);
+    }
+
+    @Override
+    public java.sql.Date getPenultimateDiseaseAlbumDateBySourceNative(boolean currentDate, java.sql.Date specificDate, String source){
+        return timeProvider.convertSQLDateToUtilDate(daoAlbum.getPenultimateDiseaseAlbumDateBySourceNative(currentDate, specificDate, source));
+    }
+
 
     @Override
     public edu.upm.midas.model.response.Album findByLastVersionNative() {

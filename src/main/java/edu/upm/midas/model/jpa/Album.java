@@ -257,7 +257,52 @@ import java.util.Objects;
                         "FROM album_disease b " +
                         "WHERE b.album_id = :albumId AND b.date = :version) " +
                         "WHERE album_id = :albumId AND date = :version "
+        ),
+        @NamedNativeQuery(
+                name = "Album.getCurrentPenultimateGeneralDiseaseAlbumDateNative",
+                query = "SELECT MAX(date) 'penultimate_album_date'\n" +
+                        "FROM album\n" +
+                        "WHERE date < ( SELECT MAX( date )\n" +
+                        "                 FROM album ) "
+        ),
+        @NamedNativeQuery(
+                name = "Album.getPenultimateGeneralDiseaseAlbumDateBySpecificDateNative",
+                query = "SELECT MAX(date) 'penultimate_album_date'\n" +
+                        "FROM album\n" +
+                        "WHERE date < :version "
+        ),
+        @NamedNativeQuery(
+                name = "Album.getCurrentPenultimateDiseaseAlbumDateBySourceNative",
+                query = "SELECT MAX(a.date) 'penultimate_album_date'\n" +
+                        "FROM album a\n" +
+                        "INNER JOIN album_disease ad on a.album_id = ad.album_id and a.date = ad.date\n" +
+                        "INNER JOIN disease d on ad.disease_id = d.disease_id\n" +
+                        "INNER JOIN disease_url du on d.disease_id = du.disease_id\n" +
+                        "INNER JOIN source s on du.source_id = s.source_id\n" +
+                        "WHERE a.date <\n" +
+                        "      (\n" +
+                        "        SELECT MAX( aa.date )\n" +
+                        "        FROM album aa\n" +
+                        "        INNER JOIN album_disease aad on aa.album_id = aad.album_id and aa.date = aad.date\n" +
+                        "        INNER JOIN disease dd on aad.disease_id = dd.disease_id\n" +
+                        "        INNER JOIN disease_url duu on dd.disease_id = duu.disease_id\n" +
+                        "        INNER JOIN source ss on duu.source_id = ss.source_id\n" +
+                        "        WHERE ss.name = :source \n" +
+                        "      )\n" +
+                        "AND s.name = :source "
+        ),
+        @NamedNativeQuery(
+                name = "Album.getPenultimateDiseaseAlbumDateBySpecificDateAndSourceNative",
+                query = "SELECT MAX(a.date) 'penultimate_album_date'\n" +
+                        "FROM album a\n" +
+                        "INNER JOIN album_disease ad on a.album_id = ad.album_id and a.date = ad.date\n" +
+                        "INNER JOIN disease d on ad.disease_id = d.disease_id\n" +
+                        "INNER JOIN disease_url du on d.disease_id = du.disease_id\n" +
+                        "INNER JOIN source s on du.source_id = s.source_id\n" +
+                        "WHERE a.date < :version " +
+                        "AND s.name = :source "
         )
+
 })
 
 @SqlResultSetMappings({

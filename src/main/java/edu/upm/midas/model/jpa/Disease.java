@@ -50,6 +50,35 @@ import java.util.Objects;
                 name = "Disease.insertNative",
                 query = "INSERT INTO disease (disease_id, name, source_id, partly_irrelevant, totally_irrelevant) "
                         + "VALUES (:diseaseId, :name, :sourceId, :partly_irrelevant, :totally_irrelevant)"
+        ),
+
+
+        @NamedNativeQuery(
+                name = "Disease.getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource",
+                query = "SELECT d.disease_id, d.name\n" +
+                        "FROM safe_disease d\n" +
+                        "UNION\n" +
+                        "SELECT DISTINCT d.disease_id, d.name -- a.album_id, a.date, d.disease_id, d.name 'diseaseName'\n" +
+                        "                FROM album a\n" +
+                        "                INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date\n" +
+                        "                INNER JOIN disease d ON d.disease_id = ad.disease_id\n" +
+                        "                INNER JOIN disease_url du ON du.disease_id = d.disease_id\n" +
+                        "                INNER JOIN source s ON s.source_id = du.source_id\n" +
+                        "                INNER JOIN url u ON u.url_id = du.url_id\n" +
+                        "                WHERE -- a.album_id = 'wrtkywbdfvxo'\n" +
+                        "                 a.date = :current_version \n" +
+                        "                AND s.name = :source \n" +
+                        "UNION\n" +
+                        "SELECT DISTINCT d.disease_id, d.name -- a.album_id, a.date, d.disease_id, d.name 'diseaseName'\n" +
+                        "                FROM album a\n" +
+                        "                INNER JOIN album_disease ad ON ad.album_id = a.album_id AND ad.date = a.date\n" +
+                        "                INNER JOIN disease d ON d.disease_id = ad.disease_id\n" +
+                        "                INNER JOIN disease_url du ON du.disease_id = d.disease_id\n" +
+                        "                INNER JOIN source s ON s.source_id = du.source_id\n" +
+                        "                INNER JOIN url u ON u.url_id = du.url_id\n" +
+                        "                WHERE -- a.album_id = 'wrtkywbdfvxo'\n" +
+                        "                 a.date = :penultimate_version \n" +
+                        "                AND s.name = :source "
         )
 })
 

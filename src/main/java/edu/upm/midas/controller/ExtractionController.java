@@ -58,7 +58,7 @@ public class ExtractionController {
         Album album = populateService.populate();
         if (album!=null) {
             System.out.println("Update list with the disease Safe List");
-            populateService.populateAlbumWithDiseaseSafeList(Constants.WIKIPEDIA_SOURCE, album);
+            populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
             populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
             System.out.println("Update list with the disease Safe List... READY!");
         }
@@ -85,7 +85,12 @@ public class ExtractionController {
             method = RequestMethod.GET,
             params = {"source"})
     public String test(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source) throws Exception {
-        populateService.writeJSONFile("hola GLG", "albumId", "myVersionGLG", source);
+//        populateService.writeJSONFile("hola GLG", "albumId", "myVersionGLG", source);
+        AlbumPK albumPK = new AlbumPK();
+        albumPK.setAlbumId("gsa77ipg4c2y");
+        albumPK.setDate(timeProvider.convertSQLDateToUtilDate(timeProvider.stringToDate("2019-04-01")));
+        Album album = albumService.findByIdNative(albumPK);
+        populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
         return "ESCRITO";
     }
 

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -67,6 +69,24 @@ public class DiseaseServiceImpl implements DiseaseService {
     @Override
     public List<Disease> findAllQuery() {
         return daoDisease.findAllQuery();
+    }
+
+    @Transactional(propagation= Propagation.REQUIRED,readOnly=true)
+    @Override
+    public List<edu.upm.midas.model.response.Disease> getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource(Date current_version, Date penultimate_version, String source) {
+        List<edu.upm.midas.model.response.Disease> diseaseList = new ArrayList<>();
+        //System.out.println(albumId +"|"+ version+"|"+source);
+        List<Object[]> oQueryList = daoDisease.getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource(current_version, penultimate_version, source);
+        if (oQueryList != null) {
+            for (Object[] dis : oQueryList) {
+                edu.upm.midas.model.response.Disease disease = new edu.upm.midas.model.response.Disease();
+                disease.setDiseaseId((String) dis[0]);
+                disease.setName((String) dis[1]);
+                //System.out.println(disease.getName() + " - " + disease.getUrl());
+                diseaseList.add(disease);
+            }
+        }
+        return diseaseList;
     }
 
     @Transactional(propagation= Propagation.REQUIRED)

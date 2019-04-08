@@ -81,6 +81,43 @@ public class AlbumRepositoryImpl extends AbstractDao<AlbumPK, Album>
 
     @SuppressWarnings("unchecked")
     @Override
+    public Date getPenultimateDiseaseAlbumDateNative(boolean currentDate, java.sql.Date specificDate) {
+        if (currentDate) {
+            return (Date) getEntityManager()
+                    .createNamedQuery("Album.getCurrentPenultimateGeneralDiseaseAlbumDateNative")
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }else{
+            return (Date) getEntityManager()
+                    .createNamedQuery("Album.getPenultimateGeneralDiseaseAlbumDateBySpecificDateNative")
+                    .setParameter("version", specificDate)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Date getPenultimateDiseaseAlbumDateBySourceNative(boolean currentDate, java.sql.Date specificDate, String source){
+        if (currentDate) {
+            return (Date) getEntityManager()
+                    .createNamedQuery("Album.getCurrentPenultimateDiseaseAlbumDateBySourceNative")
+                    .setParameter("source", source)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }else{
+            return (Date) getEntityManager()
+                    .createNamedQuery("Album.getPenultimateDiseaseAlbumDateBySpecificDateAndSourceNative")
+                    .setParameter("version", specificDate)
+                    .setParameter("source", source)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     public Object[] findByLastVersionNative() {
         Object[] album = null;
         List<Object[]> albumList = (List<Object[]>) getEntityManager()

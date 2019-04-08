@@ -197,11 +197,15 @@ public class Populate {
 
 
     @Transactional
-    public void populateAlbumWithDiseaseSafeList(String sourceName, Album album) throws Exception{
+    public void populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(String sourceName, Album album) throws Exception{
 
-        List<edu.upm.midas.model.response.Disease> diseaseSafeList = safeDiseaseService.findAllDiseasesBySourceName(sourceName);
+//        List<edu.upm.midas.model.response.Disease> diseaseSafeList = safeDiseaseService.findAllDiseasesBySourceName(sourceName);
+        List<edu.upm.midas.model.response.Disease> diseaseList = diseaseHelper.getDiseasesFromDiseaseSafeListAndLastDiseaseAlbum(album.getDate(), sourceName);
 
-        for (edu.upm.midas.model.response.Disease disease: diseaseSafeList) {
+        System.out.println("size of disease album: " + diseaseList.size());
+
+
+        for (edu.upm.midas.model.response.Disease disease: diseaseList) {
             //safeDiseaseService.
             if (albumHelper.insertIgnoreDiseases(album, disease.getDiseaseId()) > 0)
                 System.out.println("Inserted " + disease.getDiseaseId() + " | " + disease.getUrl());

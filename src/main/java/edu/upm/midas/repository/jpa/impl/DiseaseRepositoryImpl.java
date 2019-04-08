@@ -7,6 +7,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -90,6 +91,23 @@ public class DiseaseRepositoryImpl extends AbstractDao<String, Disease>
                 .createNamedQuery("Disease.findAll")
                 .setMaxResults(0)
                 .getResultList();
+    }
+
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public List<Object[]> getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource(Date current_version, Date penultimate_version, String source) {
+        List<Object[]> diseases = null;
+        List<Object[]> diseaseList = (List<Object[]>) getEntityManager()
+                .createNamedQuery("Disease.getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource")
+                .setParameter("current_version", current_version)
+                .setParameter("penultimate_version", penultimate_version)
+                .setParameter("source", source)
+                //.setMaxResults(100)
+                .getResultList();
+        if (CollectionUtils.isNotEmpty(diseaseList))
+            diseases = diseaseList;
+        return diseases;
     }
 
     @Override

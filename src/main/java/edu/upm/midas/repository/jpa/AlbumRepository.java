@@ -27,6 +27,10 @@ public interface AlbumRepository {
 
     Date findLastVersionNative();
 
+    Date getPenultimateDiseaseAlbumDateNative(boolean currentDate, java.sql.Date specificDate);
+
+    Date getPenultimateDiseaseAlbumDateBySourceNative(boolean currentDate, java.sql.Date specificDate, String source);
+
     Object[] findByLastVersionNative();
 
     Object[] findFirstVersionNative();

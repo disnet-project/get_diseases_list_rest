@@ -30,6 +30,10 @@ public interface AlbumService {
 
     Date findLastVersionNative();
 
+    Date getPenultimateDiseaseAlbumDateNative(boolean currentDate, java.sql.Date specificDate);
+
+    java.sql.Date getPenultimateDiseaseAlbumDateBySourceNative(boolean currentDate, java.sql.Date specificDate, String source);
+
     edu.upm.midas.model.response.Album findByLastVersionNative();
 
     edu.upm.midas.model.response.Album findFirstVersionNative();

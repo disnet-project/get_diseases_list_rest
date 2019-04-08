@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.List;
+
 /**
  * Created by gerardo on 30/10/2017.
  *
@@ -24,6 +27,8 @@ public class DiseaseHelper {
 
     @Autowired
     private DiseaseService diseaseService;
+    @Autowired
+    private AlbumService albumService;
     @Autowired
     private SafeDiseaseService safeDiseaseService;
     @Autowired
@@ -249,6 +254,14 @@ public class DiseaseHelper {
         }else{
             return uniqueIdService.generateDisease(1);
         }
+    }
+
+
+    public List<edu.upm.midas.model.response.Disease> getDiseasesFromDiseaseSafeListAndLastDiseaseAlbum(Date version, String sourceName){
+        Date penultimateAlbumDate = albumService.getPenultimateDiseaseAlbumDateBySourceNative(false, version, sourceName);
+
+        return diseaseService.getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource(version, penultimateAlbumDate, sourceName);
+
     }
 
 

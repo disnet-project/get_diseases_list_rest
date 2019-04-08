@@ -2,6 +2,7 @@ package edu.upm.midas.repository.jpa;
 
 import edu.upm.midas.model.jpa.Disease;
 
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,8 @@ public interface DiseaseRepository {
     String findLastIdNative();
     
     List<Disease> findAllQuery();
+
+    List<Object[]> getAllDiseasesFromDiseaseSafeListAndLastDiseaseAlbumBySource(Date current_version, Date penultimate_version, String source);
 
     void persist(Disease disease);
 

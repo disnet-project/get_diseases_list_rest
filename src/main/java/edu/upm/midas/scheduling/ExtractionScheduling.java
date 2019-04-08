@@ -3,7 +3,6 @@ package edu.upm.midas.scheduling;
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
 import edu.upm.midas.model.jpa.Album;
-import edu.upm.midas.service.GetDiseasesFromDBPedia;
 import edu.upm.midas.service.Populate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -66,7 +65,7 @@ public class ExtractionScheduling {
             album = populateService.populate();
             if (album!=null){
                 System.out.println("Update list with the disease Safe List");
-                populateService.populateAlbumWithDiseaseSafeList(Constants.WIKIPEDIA_SOURCE, album);
+                populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
                 System.out.println("Update list with the disease Safe List... READY!");
                 System.out.println("Update disease Safe List");
                 populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
@@ -93,7 +92,7 @@ public class ExtractionScheduling {
             album = populateService.populate();
             if (album!=null){
                 System.out.println("Update list with the disease Safe List");
-                populateService.populateAlbumWithDiseaseSafeList(Constants.WIKIPEDIA_SOURCE, album);
+                populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
                 System.out.println("Update list with the disease Safe List... READY!");
                 System.out.println("Update disease Safe List");
                 populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
