@@ -61,16 +61,17 @@ public class ExtractionScheduling {
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
             Album album = null;
-            System.out.println("Scheduled task for the first of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
+            System.out.println("Scheduled task for the first of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
             if (album!=null){
-                System.out.println("Update list with the disease Safe List");
+                System.out.println("Update the currently disease album with the disease Safe List and the last disease album");
                 populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
-                System.out.println("Update list with the disease Safe List... READY!");
+                System.out.println("Update the currently disease album with the disease Safe List and the last disease album... READY!");
                 System.out.println("Update disease Safe List");
                 populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
                 System.out.println("Update disease Safe List... READY!");
             }
+            System.out.println("Scheduled task for the first of each month at midnight end!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
             System.out.println("DISLISTERR (1stOfTheMonth): " + e.getMessage());
         }
@@ -88,16 +89,17 @@ public class ExtractionScheduling {
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             Album album = null;
-            System.out.println("Scheduled for the 15th of each month at midnight." + timeProvider.getNowFormatyyyyMMdd());
+            System.out.println("Scheduled for the 15th of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
             if (album!=null){
-                System.out.println("Update list with the disease Safe List");
+                System.out.println("Update the currently disease album with the disease Safe List and the last disease album");
                 populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
-                System.out.println("Update list with the disease Safe List... READY!");
+                System.out.println("Update the currently disease album with the disease Safe List and the last disease album... READY!");
                 System.out.println("Update disease Safe List");
                 populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
                 System.out.println("Update disease Safe List... READY!");
             }
+            System.out.println("Scheduled for the 15th of each month at midnight ends!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
             System.out.println("DISLISTERR (15thOfTheMonth): " + e.getMessage());
         }
