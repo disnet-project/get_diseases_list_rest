@@ -102,7 +102,7 @@ public class ExtractionController {
         albumPK.setAlbumId("gsa77ipg4c2y");
         albumPK.setDate(timeProvider.convertSQLDateToUtilDate(timeProvider.stringToDate("2019-04-01")));
         Album album = albumService.findByIdNative(albumPK);
-        extractionScheduling.createAndSendInformationEmail(album, Constants.WIKIPEDIA_SOURCE, album.getDate().toString());
+        extractionScheduling.createAndSendInformationEmail(album, Constants.WIKIPEDIA_SOURCE);
     }
 
 }

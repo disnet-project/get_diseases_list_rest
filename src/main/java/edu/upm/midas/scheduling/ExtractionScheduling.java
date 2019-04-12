@@ -7,7 +7,6 @@ import edu.upm.midas.email.service.EmailService;
 import edu.upm.midas.model.jpa.Album;
 import edu.upm.midas.service.Populate;
 import edu.upm.midas.service.jpa.AlbumService;
-import edu.upm.midas.service.jpa.helper.DiseaseHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +78,9 @@ public class ExtractionScheduling {
             Album album = null;
             logger.info("Scheduled task for the first of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
-            if (album!=null)
+            if (album!=null) {
                 updateAlbumDiseaseListProcedure(album, Constants.WIKIPEDIA_SOURCE);
+            }
 
             logger.info("Scheduled task for the first of each month at midnight end!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
@@ -162,8 +162,9 @@ public class ExtractionScheduling {
             Album album = null;
             logger.info("Scheduled for the 15th of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
-            if (album!=null)
+            if (album!=null) {
                 updateAlbumDiseaseListProcedure(album, Constants.WIKIPEDIA_SOURCE);
+            }
 
             logger.info("Scheduled for the 15th of each month at midnight ends!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
