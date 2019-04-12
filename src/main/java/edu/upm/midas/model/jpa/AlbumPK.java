@@ -51,4 +51,13 @@ public class AlbumPK implements Serializable {
     public int hashCode() {
         return Objects.hash(albumId, date);
     }
+
+
+    @Override
+    public String toString() {
+        return "AlbumPK{" +
+                "albumId='" + albumId + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }

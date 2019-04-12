@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Constants {
 
-    public static final String HTTP_HEADER = "https://";
+    public static final String HTTP_HEADER = "http://";
+    public static final String HTTPS_HEADER = "https://";
     public static final String VERSION_PROJECT = "1.0";
 
     public static final String LOCALHOST = "localhost";

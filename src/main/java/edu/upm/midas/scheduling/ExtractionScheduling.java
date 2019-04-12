@@ -2,11 +2,20 @@ package edu.upm.midas.scheduling;
 
 import edu.upm.midas.common.util.TimeProvider;
 import edu.upm.midas.constants.Constants;
+import edu.upm.midas.email.model.EmailStatus;
+import edu.upm.midas.email.service.EmailService;
 import edu.upm.midas.model.jpa.Album;
 import edu.upm.midas.service.Populate;
+import edu.upm.midas.service.jpa.AlbumService;
+import edu.upm.midas.service.jpa.helper.DiseaseHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+
+import java.sql.Date;
 
 /**
  * Created by gerardo on 03/11/2017.
@@ -20,8 +29,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExtractionScheduling {
 
+    private static final Logger logger = LoggerFactory.getLogger(ExtractionScheduling.class);
+
     @Autowired
     private Populate populateService;
+    @Autowired
+    private AlbumService albumService;
+    @Autowired
+    private EmailService emailService;
+
     @Autowired
     private TimeProvider timeProvider;
 
@@ -61,19 +77,74 @@ public class ExtractionScheduling {
     public void extractionEveryFirstDayOfTheMonth() throws Exception {
         try {
             Album album = null;
-            System.out.println("Scheduled task for the first of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
+            logger.info("Scheduled task for the first of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
-            if (album!=null){
-                System.out.println("Update the currently disease album with the disease Safe List and the last disease album");
-                populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
-                System.out.println("Update the currently disease album with the disease Safe List and the last disease album... READY!");
-                System.out.println("Update disease Safe List");
-                populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
-                System.out.println("Update disease Safe List... READY!");
-            }
-            System.out.println("Scheduled task for the first of each month at midnight end!" + timeProvider.getNowFormatyyyyMMdd());
+            if (album!=null)
+                updateAlbumDiseaseListProcedure(album, Constants.WIKIPEDIA_SOURCE);
+
+            logger.info("Scheduled task for the first of each month at midnight end!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
-            System.out.println("DISLISTERR (1stOfTheMonth): " + e.getMessage());
+            logger.error("Error to populate tha DB with the scheduled task for the first of each month at midnight", e);
+        }
+    }
+
+
+    /**
+     * Método que actualiza la lista de enfermedades del album recien creado
+     *
+     * Integra enfermedades provenientes de la Safe List de enfermedades y con las enfermedades del
+     * album enterior
+     *
+     * @param album
+     * @param sourceName
+     */
+    public void updateAlbumDiseaseListProcedure(Album album, String sourceName){
+        try {
+            logger.info("Update the currently disease album with the disease Safe List and the last disease album");
+            populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(sourceName, album);
+            logger.info("Update the currently disease album with the disease Safe List and the last disease album... READY!");
+            logger.info("Update disease Safe List");
+            populateService.updateDiseaseSafeList(sourceName, album);
+            logger.info("Update disease Safe List... READY!");
+            createAndSendInformationEmail(album, sourceName);
+        }catch (Exception e){
+            logger.error("Error to update current album {}", album.toString(), e);
+        }
+    }
+
+
+    public Album getPenultimateAlbumInfo(Album album, String sourceName){
+        Date penultimateAlbumDate = albumService.getPenultimateDiseaseAlbumDateBySourceNative(false, album.getDate(), sourceName);
+        edu.upm.midas.model.response.Album penultimateAlbum = albumService.findByVersionAndSourceNative(penultimateAlbumDate, sourceName);
+        Album albumReturned = null;
+        if (penultimateAlbum!=null) {
+            albumReturned = new Album(penultimateAlbum.getAlbumId(), timeProvider.convertSQLDateToUtilDate(penultimateAlbum.getDate()), penultimateAlbum.getNumberDiseases());
+        }
+        return albumReturned;
+    }
+
+
+    public void createAndSendInformationEmail(Album currentAlbum, String sourceName){
+        Album penultimateAlbum = getPenultimateAlbumInfo(currentAlbum, sourceName);
+        if (penultimateAlbum!=null) {
+            Context context = new Context();
+            context.setVariable("currentAlbum", currentAlbum);
+            context.setVariable("penultimateAlbum", penultimateAlbum);
+            context.setVariable("version", currentAlbum.getDate().toString());
+            context.setVariable("user", "Gerardo Lagunes");
+            String messageType = "";
+            String color = "";
+            int diff = currentAlbum.getNumberDiseases() - penultimateAlbum.getNumberDiseases();
+            if (diff>=0){
+                messageType = "Info. The number of diseases has increased";
+                color = "green-text";
+            }else{
+                messageType = "Warning. The number of diseases has decrease, please verify disease list.";
+                color = "red-text";
+            }
+            context.setVariable("message_type", messageType);
+            context.setVariable("message_color", color);
+            EmailStatus confirmationEmailStatus = emailService.sendSuccessfulProcedureMessage(context);
         }
     }
 
@@ -89,19 +160,14 @@ public class ExtractionScheduling {
     public void extractionEvery15thDayOfTheMonth() throws Exception {
         try {
             Album album = null;
-            System.out.println("Scheduled for the 15th of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
+            logger.info("Scheduled for the 15th of each month at midnight starts!" + timeProvider.getNowFormatyyyyMMdd());
             album = populateService.populate();
-            if (album!=null){
-                System.out.println("Update the currently disease album with the disease Safe List and the last disease album");
-                populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(Constants.WIKIPEDIA_SOURCE, album);
-                System.out.println("Update the currently disease album with the disease Safe List and the last disease album... READY!");
-                System.out.println("Update disease Safe List");
-                populateService.updateDiseaseSafeList(Constants.WIKIPEDIA_SOURCE,  album);
-                System.out.println("Update disease Safe List... READY!");
-            }
-            System.out.println("Scheduled for the 15th of each month at midnight ends!" + timeProvider.getNowFormatyyyyMMdd());
+            if (album!=null)
+                updateAlbumDiseaseListProcedure(album, Constants.WIKIPEDIA_SOURCE);
+
+            logger.info("Scheduled for the 15th of each month at midnight ends!" + timeProvider.getNowFormatyyyyMMdd());
         }catch (Exception e){
-            System.out.println("DISLISTERR (15thOfTheMonth): " + e.getMessage());
+            logger.error("Error to populate tha DB with the scheduled task for the 15th of each month at midnight", e);
         }
     }
 

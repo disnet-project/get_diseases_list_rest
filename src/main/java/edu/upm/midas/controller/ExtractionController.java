@@ -97,7 +97,12 @@ public class ExtractionController {
     @RequestMapping(path = { "/automatic_extraction" }, //wikipedia extraction
             method = RequestMethod.GET)
     public void automaticExtraction() throws Exception {
-        extractionScheduling.extractionEveryFirstDayOfTheMonth();
+//        extractionScheduling.extractionEveryFirstDayOfTheMonth();
+        AlbumPK albumPK = new AlbumPK();
+        albumPK.setAlbumId("gsa77ipg4c2y");
+        albumPK.setDate(timeProvider.convertSQLDateToUtilDate(timeProvider.stringToDate("2019-04-01")));
+        Album album = albumService.findByIdNative(albumPK);
+        extractionScheduling.createAndSendInformationEmail(album, Constants.WIKIPEDIA_SOURCE, album.getDate().toString());
     }
 
 }

@@ -328,6 +328,15 @@ public class Album {
 
     private List<AlbumDisease> albumDiseases;
 
+    public Album() {
+    }
+
+    public Album(String albumId, Date date, Integer numberDiseases) {
+        this.albumId = albumId;
+        this.date = date;
+        this.numberDiseases = numberDiseases;
+    }
+
     @Id
     @Column(name = "album_id", nullable = false, length = 15)
     public String getAlbumId() {

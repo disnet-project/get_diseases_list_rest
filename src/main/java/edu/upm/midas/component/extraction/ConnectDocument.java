@@ -67,7 +67,7 @@ public class ConnectDocument {
 
     public Connection_ tryConnect(Connection_ connection_) throws UnsupportedEncodingException {
         //http://en.wikipedia.org/wiki/
-        String convertLink = Constants.HTTP_HEADER + "en.wikipedia.org/wiki/" + URLEncoder.encode(common.cutStringPerformance(29, 0, connection_.getLink()), "UTF-8");
+        String convertLink = Constants.HTTPS_HEADER + "en.wikipedia.org/wiki/" + URLEncoder.encode(common.cutStringPerformance(29, 0, connection_.getLink()), "UTF-8");
         System.out.println(connection_.getLink()+ " - " +convertLink);
 
         try {//Constants.HTTP_HEADER +

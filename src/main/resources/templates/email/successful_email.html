@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <!--<div th:replace="email/fragments/header :: header-css"/>-->
+        <link rel = "stylesheet"
+              href = "https://fonts.googleapis.com/icon?family=Material+Icons"/>
+        <link rel = "stylesheet"
+              href = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css"/>
+        <title th:remove="all">Template for HTML email with inline image</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="section no-pad-bot" id="index-banner">
+                <div class="container">
+                    <h1 class="header center orange-text">DISNET<!--<img width="250" src="V_color.png" th:src="|cid:${V_disnet_logo}|" />--></h1>
+                    <div class="row center">
+                        <h4 class="header col s12 light">Drug repositioning and disease understanding through complex networks creation and analysis</h4>
+                    </div>
+                </div>
+            </div>
+            <p>Hi Admin <span th:text="${user}" />,</p>
+            <p class="light text-align-justify">The extraction procedure scheduled to run on <span th:text="${version}" /> has been successfully completed.</p>
+            <p class="light text-align-justify">Report of the creation of the current album vs. the previous one:</p>
+            <p class="light text-align-justify"><b>New (current) album - DBpedia and DBpedia-Live</b></p>
+            <p class="light text-align-justify">
+                <ul>
+                    <li type="circle">Album id: &nbsp; <span th:text="${currentAlbum.getAlbumId()}" /></li>
+                    <li type="circle">Version: &nbsp; <span th:text="${currentAlbum.getDate()}" /></li>
+                    <li type="circle">Number of diseases: &nbsp; <span th:text="${currentAlbum.getNumberDiseases()}" /></li>
+                </ul>
+            </p>
+            <p class="light text-align-justify"><b>Previous album - DBpedia and DBpedia-Live</b></p>
+            <p class="light text-align-justify">
+            <ul>
+                <li type="circle">Album id: &nbsp; <span th:text="${penultimateAlbum.getAlbumId()}" /></li>
+                <li type="circle">Version: &nbsp; <span th:text="${penultimateAlbum.getDate()}" /></li>
+                <li type="circle">Number of diseases: &nbsp; <span th:text="${penultimateAlbum.getNumberDiseases()}" /></li>
+            </ul>
+            </p>
+            <p class="light text-align-justify" >
+                <span th:class="${message_color}" th:text="${message_type}" />
+            </p>
+        </div>
+        <div th:replace="fragments/footer :: footer"/>
+        <!--<div th:replace="email/fragments/footer :: footer"/>-->
+        <script type = "text/javascript"
+                src = "https://code.jquery.com/jquery-2.1.1.min.js"></script>
+        <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js">
+        </script>
+        <!--<div th:replace="email/fragments/footer :: footer-js"/>-->
+    </body>
+</html>
