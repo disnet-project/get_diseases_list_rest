@@ -12,6 +12,8 @@ import edu.upm.midas.constants.Constants;
 import edu.upm.midas.enums.SourceEnum;
 import edu.upm.midas.model.extraction.Code;
 import edu.upm.midas.model.extraction.Disease;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ import java.util.Map.Entry;
 
 @Service
 public class GetDiseasesFromDBPedia {
+
+	private static final Logger logger = LoggerFactory.getLogger(GetDiseasesFromDBPedia.class);
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -50,10 +54,21 @@ public class GetDiseasesFromDBPedia {
 			 *
 			 * Se puede consultar los objetos para ver sus datos.
 			*/
-			diseases = getListDiseasesDBPedia(source);
+			//Si la lista de enlaces es nula o no tiene elementos, espera una hora para realizar otra petición y así
+			//hasta que se consiga una respuesta adecuada
+			//Esto se realiza para garantizar que el proceso de población tenga una lista con la cual trabajar.
+			while (true){
+				diseases = getListDiseasesDBPedia(source);
+				if (diseases!=null) {
+					if (diseases.size()>0) break;
+				}
+				logger.info("Wait (1 hour = 3600000 mls) for another disease list request to " + source + ", because its response is null.");
+				Thread.sleep(3600000);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			logger.error("Error to read the " + source + " response", e);
 		}
 		return diseases;
 	}
@@ -101,7 +116,8 @@ public class GetDiseasesFromDBPedia {
 			System.out.println("Total: " + v);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			e.printStackTrace();
+			logger.error("Error to read the " + source + " query response ", e);
 		}
 	}
 

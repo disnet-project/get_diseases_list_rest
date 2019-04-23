@@ -67,6 +67,7 @@ public class Populate {
     public Album populate() throws Exception{
 
         Album album = null;
+        //Realiza y gestiona la consulta SPARQL a DBpedia y a la DBpedia-Live
         Map<Code, Disease> dbpediaDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIA_SOURCE);
         Map<Code, Disease> dbpedialiveDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIALIVE_SOURCE);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -90,7 +91,7 @@ public class Populate {
                     Code code = ent.getKey();
                     diseaseList.add(disease);
                     //if (disease.getName().equals("Köhler disease")){
-                    System.out.println(v + ". Insert disease: " + disease.getName() + " - " + disease.getWikipediaPage());
+                    System.out.println(v + ". Insert disease (regular-DBpedia): " + disease.getName() + " - " + disease.getWikipediaPage());
                     String diseaseId = diseaseHelper.insertIfExist(disease);
                     albumHelper.insertDiseases(album, diseaseId);
                     v++;
@@ -100,9 +101,11 @@ public class Populate {
                 writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), Constants.DBPEDIA_SOURCE);
                 System.out.println("Total: " + v);
                 //</editor-fold>
+
+
                 //<editor-fold desc="POPULATE DBPEDIALIVE">
 //                insert(dbpedialiveDiseases, diseaseList, album, Constants.DBPEDIALIVE_SOURCE);
-                System.out.println("Populate start (regular DBpedia-Live)...");
+                System.out.println("Populate start (DBpedia-Live)...");
                 allDS = dbpedialiveDiseases.entrySet();
                 it = allDS.iterator();
                 v = 0;
