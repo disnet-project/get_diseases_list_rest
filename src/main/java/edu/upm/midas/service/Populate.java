@@ -200,7 +200,7 @@ public class Populate {
 
 
     @Transactional
-    public void populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(String sourceName, Album album) throws Exception{
+    public Album populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(String sourceName, Album album) throws Exception{
 
 //        List<edu.upm.midas.model.response.Disease> diseaseSafeList = safeDiseaseService.findAllDiseasesBySourceName(sourceName);
         List<edu.upm.midas.model.response.Disease> diseaseList = diseaseHelper.getDiseasesFromDiseaseSafeListAndLastDiseaseAlbum(album.getDate(), sourceName);
@@ -215,8 +215,7 @@ public class Populate {
             else
                 System.out.println("Ignore " + disease.getDiseaseId() + " | " + disease.getUrl());
         }
-        albumHelper.update(album);
-
+        return albumHelper.update(album);
     }
 
 

@@ -69,6 +69,14 @@ public class AlbumHelper {
     }
 
 
+    public Album findById(String albumId, Date version){
+        AlbumPK albumPK = new AlbumPK();
+        albumPK.setAlbumId(albumId);
+        albumPK.setDate((java.sql.Date) version);
+        return albumService.findByIdNative(albumPK);
+    }
+
+
     public void insertDiseases(Album album, String diseaseId){
         AlbumDiseasePK albumDiseasePK = new AlbumDiseasePK();
         albumDiseasePK.setAlbumId(album.getAlbumId());
@@ -87,8 +95,9 @@ public class AlbumHelper {
     }
 
 
-    public void update(Album album){
+    public Album update(Album album){
         albumService.updateNumberDiseasesByIdNative(album.getAlbumId(), album.getDate());
+        return findById(album.getAlbumId(), album.getDate());
     }
 
     public List<Disease> findLinksByIdAndSourceNameNativeAndReplaceSpecialCharacters(List<ApiResponseError> apiResponseErrors, String albumId, Date version, String source){

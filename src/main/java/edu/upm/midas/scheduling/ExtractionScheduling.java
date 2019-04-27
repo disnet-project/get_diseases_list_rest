@@ -101,7 +101,7 @@ public class ExtractionScheduling {
     public void updateAlbumDiseaseListProcedure(Album album, String sourceName){
         try {
             logger.info("Update the currently disease album with the disease Safe List and the last disease album");
-            populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(sourceName, album);
+            album = populateService.populateAlbumWithDiseaseSafeListAndLastDiseaseAlbum(sourceName, album);
             logger.info("Update the currently disease album with the disease Safe List and the last disease album... READY!");
             logger.info("Update disease Safe List");
             populateService.updateDiseaseSafeList(sourceName, album);
