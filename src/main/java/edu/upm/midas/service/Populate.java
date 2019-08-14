@@ -68,30 +68,32 @@ public class Populate {
 
         Album album = null;
         //Realiza y gestiona la consulta SPARQL a DBpedia y a la DBpedia-Live
-        Map<Code, Disease> dbpediaDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIA_SOURCE);
-        Map<Code, Disease> dbpedialiveDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIALIVE_SOURCE);
+        Map<Code, Disease> dbpediaDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIA_SOURCE, Constants.MAIN_QUERY);
+        Map<Code, Disease> dbpedialiveDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIALIVE_SOURCE, Constants.MAIN_QUERY);
+        Map<Code, Disease> dbpedialiveSecQueryDiseases = getDiseaseAlbumService.getDiseasesListFromDBPedia(Constants.DBPEDIALIVE_SOURCE, Constants.SECON_QUERY);
+
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         List<Disease> diseaseList = new ArrayList<>();
 
         if (dbpediaDiseases != null) {
             System.out.println("-------------------- POPULATE DATABASE --------------------");
-            System.out.println("Populate start (regular DBpedia)...");
+            System.out.println("Populate start (main-query AND regular DBpedia)...");
             Set<Map.Entry<Code, Disease>> allDS = dbpediaDiseases.entrySet();
             Iterator<Map.Entry<Code, Disease>> it = allDS.iterator();
             album = albumHelper.insertIfExist(allDS.size());
             if (album != null) {
 
-                //<editor-fold desc="POPULATE DBPEDIA">
+                //<editor-fold desc="POPULATE DBPEDIA WITH MAIN QUERY">
 //                insert(dbpediaDiseases, diseaseList, album, Constants.DBPEDIA_SOURCE);
 
-                int v = 0;
+                int v = 0, total = dbpediaDiseases.size();
                 while (it.hasNext()) {
                     Map.Entry<Code, Disease> ent = it.next();
                     Disease disease = ent.getValue();
                     Code code = ent.getKey();
                     diseaseList.add(disease);
                     //if (disease.getName().equals("Köhler disease")){
-                    System.out.println(v + ". Insert disease (regular-DBpedia): " + disease.getName() + " - " + disease.getWikipediaPage());
+                    System.out.println(v + " (" + (v*100)/total + "%) . Insert disease (main-query AND regular-DBpedia): " + disease.getName() + " - " + disease.getWikipediaPage());
                     String diseaseId = diseaseHelper.insertIfExist(disease);
                     albumHelper.insertDiseases(album, diseaseId);
                     v++;
@@ -103,19 +105,19 @@ public class Populate {
                 //</editor-fold>
 
 
-                //<editor-fold desc="POPULATE DBPEDIALIVE">
+                //<editor-fold desc="POPULATE DBPEDIALIVE WITH MAIN QUERY">
 //                insert(dbpedialiveDiseases, diseaseList, album, Constants.DBPEDIALIVE_SOURCE);
-                System.out.println("Populate start (DBpedia-Live)...");
+                System.out.println("Populate start (main-query AND DBpedia-Live)...");
                 allDS = dbpedialiveDiseases.entrySet();
                 it = allDS.iterator();
-                v = 0;
+                v = 0; total = dbpedialiveDiseases.size();
                 while (it.hasNext()) {
                     Map.Entry<Code, Disease> ent = it.next();
                     Disease disease = ent.getValue();
                     Code code = ent.getKey();
                     diseaseList.add(disease);
                     //if (disease.getName().equals("Köhler disease")){
-                    System.out.println(v + ". Insert disease (dbpedialive): " + disease.getName() + " - " + disease.getWikipediaPage());
+                    System.out.println(v + " (" + (v*100)/total + "%) . Insert disease (dbpedialive): " + disease.getName() + " - " + disease.getWikipediaPage());
                     String diseaseId = diseaseHelper.insertIfExist(disease);
                     albumHelper.insertDiseases(album, diseaseId);
                     v++;
@@ -125,6 +127,32 @@ public class Populate {
                 writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), Constants.DBPEDIALIVE_SOURCE);
                 System.out.println("Total: " + v);
                 //</editor-fold>
+
+
+                //<editor-fold desc="POPULATE DBPEDIALIVE WITH SECOND QUERY">
+//                insert(dbpedialiveDiseases, diseaseList, album, Constants.DBPEDIALIVE_SOURCE);
+                System.out.println("Populate start (second-query AND DBpedia-Live)...");
+                allDS = dbpedialiveSecQueryDiseases.entrySet();
+                it = allDS.iterator();
+                v = 0; total = dbpedialiveSecQueryDiseases.size();
+                while (it.hasNext()) {
+                    Map.Entry<Code, Disease> ent = it.next();
+                    Disease disease = ent.getValue();
+                    Code code = ent.getKey();
+                    diseaseList.add(disease);
+                    //if (disease.getName().equals("Köhler disease")){
+                    System.out.println(v + " (" + (v*100)/total + "%) . Insert disease (second-query AND dbpedialive): " + disease.getName() + " - " + disease.getWikipediaPage());
+                    String diseaseId = diseaseHelper.insertIfExist(disease);
+                    albumHelper.insertDiseases(album, diseaseId);
+                    v++;
+                }
+                albumHelper.update(album);
+                //System.out.println(gson.toJson(diseaseList));
+                writeJSONFile(gson.toJson(diseaseList), album.getAlbumId(), timeProviderService.getNowFormatyyyyMMdd(), Constants.DBPEDIALIVE_SOURCE + "_sec_query");
+                System.out.println("Total: " + v);
+                //</editor-fold>
+
+
                 System.out.println("End polulation.");
             } else {
                 System.out.println("ERR.album empty!");

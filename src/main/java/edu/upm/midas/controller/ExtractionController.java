@@ -45,10 +45,12 @@ public class ExtractionController {
 
     @RequestMapping(path = { "/retrieve" }, //wikipedia extraction
             method = RequestMethod.GET,
-            params = {"source"})
-    public String extract(@RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source) throws Exception {
+            params = {"source", "query"})
+    public String extract(
+            @RequestParam(value = "source") @Valid @NotBlank @NotNull @NotEmpty String source
+            , @RequestParam(value = "query") @Valid @NotBlank @NotNull @NotEmpty String query) throws Exception {
         System.out.println("retrieve");
-        getDiseasesFromDBPedia.getDiseasesFromDBPedia(source);
+        getDiseasesFromDBPedia.getDiseasesFromDBPedia(source, query);
         return "Successful extraction and insertion in a DB!";
     }
 

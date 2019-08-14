@@ -32,16 +32,17 @@ public class GetDiseasesFromDBPedia {
 	private ResourceLoader resourceLoader;
 
 	private final String DISEASES_SPARQL_QUERY_FILE = Constants.DISEASES_SPARQL_QUERY_FILE;
+	private final String DISEASES_SECOND_SPARQL_QUERY_FILE = Constants.DISEASES_SECOND_SPARQL_QUERY_FILE;
 	private final String DBPEDIA_SPARQL_ENDPOINT = Constants.DBPEDIA_SPARQL_ENDPOINT;
 	private final String DBPEDIALIVE_SPARQL_ENDPOINT = Constants.DBPEDIALIVE_SPARQL_ENDPOINT;
 
 
-	public void getDiseasesFromDBPedia(String source) {
-		init(source);
+	public void getDiseasesFromDBPedia(String source, String query) {
+		init(source, query);
 	}
 
 
-	public Map<Code, Disease> getDiseasesListFromDBPedia(String source) {
+	public Map<Code, Disease> getDiseasesListFromDBPedia(String source, String query) {
 		Map<Code, Disease> diseases = null;
 		try {
 			/* El m�todo getListDiseasesDBPedia() es el encargado de hacer la query SPARQL
@@ -58,7 +59,7 @@ public class GetDiseasesFromDBPedia {
 			//hasta que se consiga una respuesta adecuada
 			//Esto se realiza para garantizar que el proceso de población tenga una lista con la cual trabajar.
 			while (true){
-				diseases = getListDiseasesDBPedia(source);
+				diseases = getListDiseasesDBPedia(source, query);
 				if (diseases!=null) {
 					if (diseases.size()>0) break;
 				}
@@ -68,12 +69,12 @@ public class GetDiseasesFromDBPedia {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 //			e.printStackTrace();
-			logger.error("Error to read the " + source + " response", e);
+			logger.error("Error to read the " + source + " - " + query + " response", e);
 		}
 		return diseases;
 	}
 
-	private void init(String source) {
+	private void init(String source, String query) {
 		try {
 			/* El m�todo getListDiseasesDBPedia() es el encargado de hacer la query SPARQL
 			 * que se encuentra en el fichero "sparql/getDiseases.sparql" y obtener todos los art�culos
@@ -85,7 +86,7 @@ public class GetDiseasesFromDBPedia {
 			 * 
 			 * Se puede consultar los objetos para ver sus datos.
 			*/
-			Map<Code, Disease> diseases = getListDiseasesDBPedia(source);
+			Map<Code, Disease> diseases = getListDiseasesDBPedia(source, query);
 			Set<Entry<Code, Disease>> allDS = diseases.entrySet();
 			Iterator<Entry<Code, Disease>> it = allDS.iterator();
 			System.out.println("Disease list size: " + diseases.size());
@@ -131,21 +132,29 @@ public class GetDiseasesFromDBPedia {
 	 *             Puede lanzar una excepci�n.
 	 */
 	@SuppressWarnings("resource")
-	private Map<Code, Disease> getListDiseasesDBPedia(String source) throws Exception {
+	private Map<Code, Disease> getListDiseasesDBPedia(String source, String queryType) throws Exception {
 		Map<Code, Disease> diseases = new HashMap<Code, Disease>();
 		Query query = null;
 		QueryEngineHTTP qexec = null;
-		String finalQuery = loadQuery(DISEASES_SPARQL_QUERY_FILE);
+		String finalQuery = "";
+		if (queryType.equalsIgnoreCase(Constants.MAIN_QUERY)) {
+			finalQuery = loadQuery(DISEASES_SPARQL_QUERY_FILE);
+		}else{
+			finalQuery = loadQuery(DISEASES_SECOND_SPARQL_QUERY_FILE);
+            //System.out.println("SEGUNDO: " + finalQuery);
+		}
 		query = QueryFactory.create(finalQuery);
+
 		if (source.equals(Constants.DBPEDIA_SOURCE)) {
 			qexec = new QueryEngineHTTP(DBPEDIA_SPARQL_ENDPOINT, query);
-		}else{
+		}else {
 			qexec = new QueryEngineHTTP(DBPEDIALIVE_SPARQL_ENDPOINT, query);
 		}
 		ResultSet results = qexec.execSelect();
 		while (results.hasNext()) {
 			QuerySolution qs = results.next();
 			Resource dis = qs.getResource("?d");
+
 			Disease disease = new Disease(dis.getURI(), SourceEnum.getEnumByDescription(source).getKey());
 			Literal name = qs.getLiteral("?dn");
 			disease.setName(name.getString());

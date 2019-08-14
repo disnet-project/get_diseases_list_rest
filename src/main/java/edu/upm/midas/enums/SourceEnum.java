@@ -35,9 +35,10 @@ public enum SourceEnum {
     }
 
     public static SourceEnum getEnumByDescription(String description) {
+        //System.out.println("source_description: " + description);
         if (StringUtils.isNotBlank(description)) {
             for (SourceEnum source : SourceEnum.values()) {
-                if (description.equals(source.getDescription()))
+                if (description.equalsIgnoreCase(source.getDescription()))
                     return source;
             }
         }
